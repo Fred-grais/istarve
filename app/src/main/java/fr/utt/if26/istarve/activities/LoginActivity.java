@@ -1,6 +1,7 @@
 package fr.utt.if26.istarve.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
     // UI references.
     private LoginView view;
 
-    private static final String PREFS_NAME = "LoginPrefs";
+    public static final String PREFS_NAME = "LoginPrefs";
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     private static final String LOGIN_URL = "https://istarve.herokuapp.com/auth/sign_in";
@@ -113,6 +114,13 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         Log.v(TAG, settings.getString("accessToken", ""));
         Log.v(TAG, settings.getString("client", ""));
         Log.v(TAG, settings.getString("uid", ""));
+        Intent intent = new Intent(this, TestActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onTaskCompleted(JSONArray json) {
+
     }
 
     public void onTaskCancelled() {
@@ -144,6 +152,11 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
                 showAlertDialog("Login Error", "Your credentials are invalids, please try again.");
             }
         });
+
+    }
+
+    @Override
+    public void onTaskFailed(JSONArray json) {
 
     }
 
