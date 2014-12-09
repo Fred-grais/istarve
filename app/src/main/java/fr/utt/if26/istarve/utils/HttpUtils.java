@@ -6,14 +6,18 @@ import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -60,12 +64,12 @@ public class HttpUtils {
             case HTTP_GET_REQUEST:
                 response = buildGetRequest();
                 break;
-//            case HTTP_POST_REQUEST:
-//                response = buildPostRequest();
-//                break;
-//            case HTTP_PATCH_REQUEST:
-//                response = buildPatchRequest();
-//                break;
+            case HTTP_POST_REQUEST:
+                response = buildPostRequest();
+                break;
+            case HTTP_PATCH_REQUEST:
+                response = buildPatchRequest();
+                break;
             default:
                 Log.v(TAG, "Method not supported: " + mhttpMethod);
                 break;
@@ -76,15 +80,7 @@ public class HttpUtils {
     private HttpResponse buildGetRequest(){
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(mUrl);
-        SharedPreferences settings = mContext.getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-        Log.v(TAG, settings.getString("accessToken", ""));
-        Log.v(TAG, settings.getString("client", ""));
-        Log.v(TAG, settings.getString("uid", ""));
-        httpGet.setHeader("Accept", "application/json");
-        httpGet.setHeader("Content-type", "application/json");
-        httpGet.addHeader( "Access-Token" , settings.getString("accessToken", "") );
-        httpGet.addHeader( "Client" , settings.getString("client", "") );
-        httpGet.addHeader( "Uid" , settings.getString("uid", "") );
+        addHeadersToRequest(httpGet);
         HttpResponse response = null;
         try {
             response = httpclient.execute(httpGet);
@@ -92,5 +88,57 @@ public class HttpUtils {
             e.printStackTrace();
         }
         return response;
+    }
+
+    private HttpResponse buildPostRequest(){
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(mUrl);
+        HttpResponse response = null;
+        addHeadersToRequest(httpPost);
+        addParams(httpPost);
+        try {
+            response = httpclient.execute(httpPost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    private HttpResponse buildPatchRequest(){
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPut httpPut = new HttpPut(mUrl);
+        HttpResponse response = null;
+        addHeadersToRequest(httpPut);
+        addParams(httpPut);
+        try {
+            response = httpclient.execute(httpPut);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    private void addHeadersToRequest(HttpRequestBase request){
+        SharedPreferences settings = mContext.getSharedPreferences(LoginActivity.PREFS_NAME, 0);
+        Log.v(TAG, settings.getString("accessToken", ""));
+        Log.v(TAG, settings.getString("client", ""));
+        Log.v(TAG, settings.getString("uid", ""));
+        request.setHeader("Accept", "application/json");
+        request.setHeader("Content-type", "application/json");
+        request.addHeader( "Access-Token" , settings.getString("accessToken", "") );
+        request.addHeader( "Client" , settings.getString("client", "") );
+        request.addHeader( "Uid" , settings.getString("uid", "") );
+    }
+
+    private void addParams(HttpEntityEnclosingRequestBase request){
+        if(mParams != null){
+            StringEntity se = null;
+            try {
+                se = new StringEntity(mParams.toString());
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            request.setEntity(se);
+        }
     }
 }
