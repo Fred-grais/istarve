@@ -1,19 +1,15 @@
 package fr.utt.if26.istarve.views;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
 import fr.utt.if26.istarve.R;
+import fr.utt.if26.istarve.activities.LoginActivity;
 import fr.utt.if26.istarve.utils.LoginValidationsUtils;
 
 /**
@@ -23,15 +19,6 @@ public class LoginFragment extends android.support.v4.app.Fragment {
     private Button mEmailSignInButton;
     private EditText mEmailView;
     private EditText mPasswordView;
-    private LoginView mLoginView;
-
-    public LoginFragment() {
-
-    }
-
-    public void setLoginView(LoginView loginView){
-        mLoginView = loginView;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +69,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
                     // form field with an error.
                     focusView.requestFocus();
                 }else{
-                    mLoginView.getViewListener().onSubmitLogin(email, password);
+                    ((LoginActivity) getActivity()).getViewListener().onSubmitLogin(email, password);
                 }
 
             }

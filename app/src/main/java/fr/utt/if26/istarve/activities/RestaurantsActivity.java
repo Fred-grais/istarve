@@ -1,6 +1,5 @@
 package fr.utt.if26.istarve.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -19,8 +18,6 @@ import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
-import fr.utt.if26.istarve.views.LoginMenuFragment;
-import fr.utt.if26.istarve.views.LoginView;
 import fr.utt.if26.istarve.views.RestaurantsMenuFragment;
 import fr.utt.if26.istarve.views.RestaurantsView;
 
@@ -64,7 +61,6 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
 
     @Override
     public void onTaskCompleted(JSONObject json) {
-
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import fr.utt.if26.istarve.R;
+import fr.utt.if26.istarve.activities.LoginActivity;
 import fr.utt.if26.istarve.utils.LoginValidationsUtils;
 
 /**
@@ -16,7 +17,6 @@ import fr.utt.if26.istarve.utils.LoginValidationsUtils;
  */
 public class RegisterFragment extends android.support.v4.app.Fragment {
 
-    private LoginView mLoginView;
     private Button mEmailRegisterButton;
     private EditText mEmailView;
     private EditText mPasswordView;
@@ -24,10 +24,6 @@ public class RegisterFragment extends android.support.v4.app.Fragment {
 
     public RegisterFragment() {
 
-    }
-
-    public void setLoginView(LoginView loginView){
-        mLoginView = loginView;
     }
 
     @Override
@@ -86,7 +82,7 @@ public class RegisterFragment extends android.support.v4.app.Fragment {
                     // form field with an error.
                     focusView.requestFocus();
                 }else{
-                    mLoginView.getViewListener().onSubmitRegister(email, password, password_confirmation);
+                    ((LoginActivity) getActivity()).getViewListener().onSubmitRegister(email, password, password_confirmation);
                 }
 
             }

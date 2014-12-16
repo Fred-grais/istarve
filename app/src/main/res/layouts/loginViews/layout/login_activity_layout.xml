@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fr.utt.if26.istarve.views.LoginView
+<!--<fr.utt.if26.istarve.views.LoginView-->
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -26,18 +27,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/menu_container"
-                android:layout_width="match_parent"
+            <fragment
+                android:id="@+id/fragment_tab"
+                android:name="fr.utt.if26.istarve.views.LoginMenuFragment"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="#eee">
-            </FrameLayout>
+                tools:layout="@layout/fragment_menu_login" />
 
             <FrameLayout
-                android:id="@+id/container"
+                android:id="@+id/fragment_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -46,4 +44,5 @@
 
         </LinearLayout>
     </ScrollView>
-</fr.utt.if26.istarve.views.LoginView>
+</LinearLayout>
+<!--</fr.utt.if26.istarve.views.LoginView>-->

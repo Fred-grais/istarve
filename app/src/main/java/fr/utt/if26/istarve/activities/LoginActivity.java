@@ -1,10 +1,15 @@
 package fr.utt.if26.istarve.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 
@@ -20,7 +25,6 @@ import fr.utt.if26.istarve.asyn_tasks.AuthenticationTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.utils.DialogUtil;
 import fr.utt.if26.istarve.views.LoginMenuFragment;
-import fr.utt.if26.istarve.views.LoginView;
 
 
 /**
@@ -34,7 +38,6 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
     private AuthenticationTask mAuthTask = null;
 
     // UI references.
-    private LoginView view;
 
     public static final String PREFS_NAME = "LoginPrefs";
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -42,18 +45,17 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
     private static final String LOGIN_URL = "https://istarve.herokuapp.com/auth/sign_in";
     private static final String REGISTER_URL = "https://istarve.herokuapp.com/auth";
 
+    private View mLoginFormView, mProgressView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = (LoginView)View.inflate(this, R.layout.login_layout, null);
-        view.setViewListener(viewListener);
-        setContentView(view);
-        LoginMenuFragment menuFragment = new LoginMenuFragment();
-        menuFragment.setLoginView(view);
-
-        if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.menu_container, menuFragment).commit();
-        }
+        setContentView(R.layout.login_activity_layout);
+        FragmentManager fm = getSupportFragmentManager();
+        LoginMenuFragment tabFragment = (LoginMenuFragment) fm.findFragmentById(R.id.fragment_tab);
+        tabFragment.gotoLoginView();
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
     }
 
 
@@ -66,7 +68,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         if (mAuthTask != null) {
             return;
         }
-        view.showProgress(true);
+        showProgress(true);
         Map<String, String> params = new HashMap<String, String>();
         params.put("email", email);
         params.put("password", password);
@@ -78,7 +80,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         if (mAuthTask != null) {
             return;
         }
-        view.showProgress(true);
+        showProgress(true);
         Map<String, String> params = new HashMap<String, String>();
         params.put("email", email);
         params.put("password", password);
@@ -92,7 +94,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
     public void onTaskCompleted(JSONObject json) {
         Log.v(TAG, json.toString());
         mAuthTask = null;
-        view.showProgress(false);
+        showProgress(false);
         String accessToken = null, client = null, uid = null;
 
         try {
@@ -125,7 +127,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
             @Override
             public void run() {
                 mAuthTask = null;
-                view.showProgress(false);
+                showProgress(false);
                 showAlertDialog("Network Error", "An unexpected error happened when trying to connect to the login service. We are investigating the issue.");
             }
         });
@@ -140,12 +142,11 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        view.setIncorrectPasswordInfos();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mAuthTask = null;
-                view.showProgress(false);
+                showProgress(false);
                 showAlertDialog("Login Error", "Your credentials are invalids, please try again.");
             }
         });
@@ -161,7 +162,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         new DialogUtil(this).showAlertDialog(title, message);
     }
 
-    private LoginView.ViewListener viewListener = new LoginView.ViewListener() {
+    private LoginMenuFragment.ViewListener viewListener = new LoginMenuFragment.ViewListener() {
         @Override
         public void onSubmitLogin(String email, String password) {
             attemptLogin(email, password);
@@ -172,6 +173,43 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
             attemptRegister(email, password, password_confirmation);
         }
     };
+
+    public LoginMenuFragment.ViewListener getViewListener(){
+        return viewListener;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
 
 
 }
