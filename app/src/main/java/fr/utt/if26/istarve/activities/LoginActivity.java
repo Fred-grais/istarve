@@ -1,6 +1,5 @@
 package fr.utt.if26.istarve.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -8,13 +7,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -114,7 +111,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         Log.v(TAG, settings.getString("accessToken", ""));
         Log.v(TAG, settings.getString("client", ""));
         Log.v(TAG, settings.getString("uid", ""));
-        Intent intent = new Intent(this, TestActivity.class);
+        Intent intent = new Intent(this, RestaurantsActivity.class);
         startActivity(intent);
     }
 
