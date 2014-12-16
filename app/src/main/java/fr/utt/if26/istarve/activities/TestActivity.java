@@ -7,11 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
+import fr.utt.if26.istarve.models.Restaurant;
+import fr.utt.if26.istarve.utils.HttpUtils;
+import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
 public class TestActivity extends Activity implements OnTaskCompleted {
 
@@ -21,7 +25,7 @@ public class TestActivity extends Activity implements OnTaskCompleted {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        new ApiQueryTask("GET", ApiQueryTask.API_FETCH_RESTAURANTS_URL, null, this, this).execute((Void) null);
+        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
     }
 
 
@@ -51,7 +55,20 @@ public class TestActivity extends Activity implements OnTaskCompleted {
 
     @Override
     public void onTaskCompleted(JSONArray json) {
+
         Log.v(TAG, "Completed: " + json.toString());
+        try {
+            JSONArray data = new JSONArray(json.get(1).toString());
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject JSONrestaurant = data.getJSONObject(i);
+                Restaurant r = Restaurant.fromJson(JSONrestaurant);
+                Log.v(TAG, r.toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getOneRestaurant(1), null, this, this).execute((Void) null);
+
     }
 
     @Override

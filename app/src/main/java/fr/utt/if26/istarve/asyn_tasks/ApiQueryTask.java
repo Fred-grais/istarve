@@ -29,8 +29,8 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
 
     private Map<String, String> mParams = new HashMap<String, String>();
     private OnTaskCompleted mlistener;
-    private int url = 0;
-    private String mhttpMethod;
+    private String url;
+    private int mhttpMethod;
     private Context mContext;
 
     private static final String host = "https://istarve.herokuapp.com";
@@ -39,11 +39,9 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
     public static final int HTTP_REQUEST_UNAUTHORIZED = 2;
     public static final int HTTP_REQUEST_FAILED = 3;
 
-    public static  final int API_FETCH_RESTAURANTS_URL = 0;
-
     private static final String TAG = ApiQueryTask.class.getSimpleName();
 
-    public ApiQueryTask(String httpMethod, int targetUrl, Map<String, String> params, OnTaskCompleted listener, Context context) {
+    public ApiQueryTask(int httpMethod, String targetUrl, Map<String, String> params, OnTaskCompleted listener, Context context) {
         mlistener = listener;
         url = targetUrl;
         mParams = params;
@@ -59,7 +57,7 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
         JSONArray obj = new JSONArray();
         obj.put(statusObj);
         try {
-            HttpResponse response = new HttpUtils(determineMethod(), determineUrl(), mParams, mContext).executeRequest();
+            HttpResponse response = new HttpUtils(mhttpMethod, url, mParams, mContext).executeRequest();
             Integer statusCode = response.getStatusLine().getStatusCode();
             Log.v(TAG, statusCode.toString());
             if ((statusCode > 200 && statusCode < 401) || (statusCode > 401)) {
@@ -71,6 +69,12 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
             }else{
                 json = EntityUtils.toString(response.getEntity(), "utf8");
                 try {
+//                    String data = "{ ... }";
+//                    Object json = new JSONTokener(data).nextValue();
+//                    if (json instanceof JSONObject)
+//                    //you have an object
+//                    else if (json instanceof JSONArray)
+//                        //you have an array
                     JSONArray responseObj = new JSONArray(json);
                     obj.put(responseObj);
                 } catch (JSONException e) {
@@ -111,6 +115,7 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
     @Override
     protected void onPostExecute(JSONArray json) {
         int status = 0;
+        Log.v(TAG, json.toString());
         try {
             status = ((JSONObject)json.get(0)).getInt("status_code");
         } catch (JSONException e) {
@@ -139,32 +144,5 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
 
     protected void onUnauthorized(JSONArray json) {
         mlistener.onTaskFailed(json);
-    }
-
-    private String determineUrl(){
-        String targetUrl = "";
-        switch(url){
-            case API_FETCH_RESTAURANTS_URL:
-                targetUrl = host + "/restaurants";
-                break;
-            default:
-                targetUrl = host + "/restaurants";
-                break;
-        }
-        return targetUrl;
-    }
-
-    private int determineMethod(){
-        int method = 0;
-        if(mhttpMethod.equals("GET")){
-            method = HttpUtils.HTTP_GET_REQUEST;
-        }else if(mhttpMethod.equals("POST")){
-            method = HttpUtils.HTTP_POST_REQUEST;
-        }else if(mhttpMethod.equals("PATCH")){
-            method = HttpUtils.HTTP_PATCH_REQUEST;
-        }else{
-            throw new IllegalArgumentException("METHOD not supported: " + mhttpMethod);
-        }
-        return method;
     }
 }
