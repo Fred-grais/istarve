@@ -2,9 +2,11 @@ package fr.utt.if26.istarve.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,15 +19,27 @@ import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
-public class TestActivity extends Activity implements OnTaskCompleted {
+import fr.utt.if26.istarve.views.LoginMenuFragment;
+import fr.utt.if26.istarve.views.LoginView;
+import fr.utt.if26.istarve.views.RestaurantsMenuFragment;
+import fr.utt.if26.istarve.views.RestaurantsView;
 
-    private static final String TAG = TestActivity.class.getSimpleName();
+public class RestaurantsActivity extends FragmentActivity implements OnTaskCompleted {
+
+    private static final String TAG = RestaurantsActivity.class.getSimpleName();
+    private RestaurantsView view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        view = (RestaurantsView)View.inflate(this, R.layout.restaurantsactivity_layout, null);
+        view.setViewListener(viewListener);
+        setContentView(view);
+        RestaurantsMenuFragment menuFragment = new RestaurantsMenuFragment();
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
+        if (savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().add(R.id.framelayoutmenu, menuFragment).commit();
+        }
     }
 
 
@@ -67,7 +81,7 @@ public class TestActivity extends Activity implements OnTaskCompleted {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getOneRestaurant(1), null, this, this).execute((Void) null);
+//        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getOneRestaurant(1), null, this, this).execute((Void) null);
 
     }
 
@@ -85,4 +99,8 @@ public class TestActivity extends Activity implements OnTaskCompleted {
     public void onTaskFailed(JSONArray json) {
         Log.v(TAG, "Failed: " + json.toString());
     }
+
+    private RestaurantsView.ViewListener viewListener = new RestaurantsView.ViewListener() {
+
+    };
 }

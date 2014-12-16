@@ -15,7 +15,7 @@ import fr.utt.if26.istarve.R;
 /**
  * Created by Fred-Dev on 30/11/2014.
  */
-public class LoginMenuFragment extends Fragment {
+public class LoginMenuFragment extends android.support.v4.app.Fragment {
 
     Fragment frag;
     FragmentTransaction fragTransaction;
