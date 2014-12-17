@@ -2,6 +2,7 @@ package fr.utt.if26.istarve.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,25 +19,24 @@ import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
+import fr.utt.if26.istarve.views.LoginMenuFragment;
 import fr.utt.if26.istarve.views.RestaurantsMenuFragment;
-import fr.utt.if26.istarve.views.RestaurantsView;
 
 public class RestaurantsActivity extends FragmentActivity implements OnTaskCompleted {
 
     private static final String TAG = RestaurantsActivity.class.getSimpleName();
-    private RestaurantsView view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = (RestaurantsView)View.inflate(this, R.layout.restaurantsactivity_layout, null);
-        view.setViewListener(viewListener);
-        setContentView(view);
-        RestaurantsMenuFragment menuFragment = new RestaurantsMenuFragment();
-        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
-        if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.framelayoutmenu, menuFragment).commit();
-        }
+        setContentView(R.layout.restaurantsactivity_layout);
+        FragmentManager fm = getSupportFragmentManager();
+        RestaurantsMenuFragment menuFragment = (RestaurantsMenuFragment) fm.findFragmentById(R.id.restaurantsMenuFragment);
+        menuFragment.gotoListeRestaurantsView();
+//        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
+//        if (savedInstanceState == null){
+//            getSupportFragmentManager().beginTransaction().add(R.id.framelayoutmenu, menuFragment).commit();
+//        }
     }
 
 
@@ -96,7 +96,5 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
         Log.v(TAG, "Failed: " + json.toString());
     }
 
-    private RestaurantsView.ViewListener viewListener = new RestaurantsView.ViewListener() {
 
-    };
 }
