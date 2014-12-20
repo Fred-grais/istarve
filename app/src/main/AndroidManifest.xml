@@ -17,6 +17,14 @@
             android:label="@string/title_activity_test" >
         </activity>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <!--Ajouter mon SHA-1 pour l'accès Google Map: 76:EB:75:E3:31:82:11:5D:FB:1F:12:F0:DF:BD:67:8A:72:DD:7C:00-->
+        <!--<meta-data-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="AIzaSyA5aEMsoQQPpvB8_u4ycSJloUjNi7dlkc4" />-->
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAfL1aWnqR_mFhvt8lKDRlnzWXMxjtJLoU" />
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -26,9 +34,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!--Gmap API-->
-    <meta-data
-        android:name="com.google.android.maps.v2.API_KEY"
-        android:value="AIzaSyA5aEMsoQQPpvB8_u4ycSJloUjNi7dlkc4" />
+
     <permission
         android:name="com.tutos.android.gmapv2.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
