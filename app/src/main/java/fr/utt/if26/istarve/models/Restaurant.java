@@ -3,18 +3,31 @@ package fr.utt.if26.istarve.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Fred-Dev on 16/12/2014.
  */
-public class Restaurant {
+public class Restaurant implements Comparable<Restaurant>, Serializable {
     private int mId;
     private float mLat;
     private float mLon;
     private String mAddress;
     private String mName;
     private String mThumbnailImgUrl;
+
+    public void setDistance(Float distance) {
+        this.distance = distance;
+    }
+
     private String mUrl;
     private int mTypeId;
+
+    public Float getDistance() {
+        return distance;
+    }
+
+    private Float distance;
 
     public static  final int API_FETCH_RESTAURANTS_URL = 0;
     public static  final int API_FETCH_RESTAURANT_URL = 1;
@@ -81,4 +94,11 @@ public class Restaurant {
         return new Restaurant(id, lat, lon, address, name, thumbnailImgUrl, url, typeId);
     }
 
+
+    @Override
+    public int compareTo(Restaurant restaurant) {
+        if (this.getDistance() < restaurant.getDistance()) return -1;
+        if (this.getDistance() > restaurant.getDistance()) return 1;
+        return 0;
+    }
 }

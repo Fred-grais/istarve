@@ -15,11 +15,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
+import fr.utt.if26.istarve.utils.Gps;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
@@ -29,14 +31,18 @@ import fr.utt.if26.istarve.views.RestaurantsMenuFragment;
 public class RestaurantsActivity extends FragmentActivity implements OnTaskCompleted {
 
     private static final String TAG = RestaurantsActivity.class.getSimpleName();
+    private ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+
+
+    public ArrayList<Restaurant> getRestaurants() {
+        return restaurants;
+    }
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.restaurantsactivity_layout);
-        FragmentManager fm = getSupportFragmentManager();
-        RestaurantsMenuFragment menuFragment = (RestaurantsMenuFragment) fm.findFragmentById(R.id.restaurantsMenuFragment);
-        menuFragment.gotoListeRestaurantsView();
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
     }
 
@@ -69,17 +75,21 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
 
         Log.v(TAG, "Completed: " + json.toString());
         try {
+            Gps g= new Gps(getBaseContext());
             ArrayList<String> tab= new ArrayList<String>();
             JSONArray data = new JSONArray(json.get(1).toString());
             for (int i = 0; i < data.length(); i++) {
                 JSONObject JSONrestaurant = data.getJSONObject(i);
                 Restaurant r = Restaurant.fromJson(JSONrestaurant);
-                tab.add(r.getmName());
+               r.setDistance(g.getDistance(r.getmLat(),r.getmLon()));
+                restaurants.add(r);
                 Log.v(TAG, r.toString());
             }
-            ListView lv=(ListView)findViewById(R.id.listViewRestaurants);
-            ArrayAdapter arrayadp =new ArrayAdapter(this,  android.R.layout.simple_list_item_1, tab);
-            lv.setAdapter(arrayadp);
+            Collections.sort(restaurants);
+            FragmentManager fm = getSupportFragmentManager();
+            RestaurantsMenuFragment menuFragment = (RestaurantsMenuFragment) fm.findFragmentById(R.id.restaurantsMenuFragment);
+            menuFragment.gotoListeRestaurantsView();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
