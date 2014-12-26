@@ -28,6 +28,7 @@ public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
 
 
 
+
         return RestaurantListeView;
     }
 

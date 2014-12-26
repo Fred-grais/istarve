@@ -6,11 +6,15 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
@@ -33,10 +37,7 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
         FragmentManager fm = getSupportFragmentManager();
         RestaurantsMenuFragment menuFragment = (RestaurantsMenuFragment) fm.findFragmentById(R.id.restaurantsMenuFragment);
         menuFragment.gotoListeRestaurantsView();
-//        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
-//        if (savedInstanceState == null){
-//            getSupportFragmentManager().beginTransaction().add(R.id.framelayoutmenu, menuFragment).commit();
-//        }
+        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
     }
 
 
@@ -68,15 +69,21 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
 
         Log.v(TAG, "Completed: " + json.toString());
         try {
+            ArrayList<String> tab= new ArrayList<String>();
             JSONArray data = new JSONArray(json.get(1).toString());
             for (int i = 0; i < data.length(); i++) {
                 JSONObject JSONrestaurant = data.getJSONObject(i);
                 Restaurant r = Restaurant.fromJson(JSONrestaurant);
+                tab.add(r.getmName());
                 Log.v(TAG, r.toString());
             }
+            ListView lv=(ListView)findViewById(R.id.listViewRestaurants);
+            ArrayAdapter arrayadp =new ArrayAdapter(this,  android.R.layout.simple_list_item_1, tab);
+            lv.setAdapter(arrayadp);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
 //        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getOneRestaurant(1), null, this, this).execute((Void) null);
 
     }

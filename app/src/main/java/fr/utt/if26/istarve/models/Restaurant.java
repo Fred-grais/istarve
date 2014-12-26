@@ -19,6 +19,38 @@ public class Restaurant {
     public static  final int API_FETCH_RESTAURANTS_URL = 0;
     public static  final int API_FETCH_RESTAURANT_URL = 1;
 
+    public int getmId() {
+        return mId;
+    }
+
+    public float getmLat() {
+        return mLat;
+    }
+
+    public float getmLon() {
+        return mLon;
+    }
+
+    public String getmAddress() {
+        return mAddress;
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public String getmThumbnailImgUrl() {
+        return mThumbnailImgUrl;
+    }
+
+    public String getmUrl() {
+        return mUrl;
+    }
+
+    public int getmTypeId() {
+        return mTypeId;
+    }
+
     public Restaurant(int id, float lat, float lon, String address, String name, String thumbnailImgUrl, String url, int typeId){
         this.mId = id;
         this.mLat = lat;

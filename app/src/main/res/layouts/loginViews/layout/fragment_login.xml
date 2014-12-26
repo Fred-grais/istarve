@@ -25,7 +25,8 @@
             android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:text="toto@utt.fr" />
 
         <EditText
             android:id="@+id/password"
@@ -37,7 +38,8 @@
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:text="azertyui" />
 
         <Button
             android:id="@+id/email_sign_in_button"
