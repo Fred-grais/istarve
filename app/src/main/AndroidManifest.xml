@@ -19,10 +19,21 @@
             android:label="@string/title_activity_test" >
         </activity>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+<<<<<<< HEAD
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDHrf5A2JdXeT4h-nlCnGfVuotDEUnCFhw"/>
 
+=======
+        <!--Ajouter mon SHA-1 pour l'accès Google Map: 76:EB:75:E3:31:82:11:5D:FB:1F:12:F0:DF:BD:67:8A:72:DD:7C:00-->
+        <!--<meta-data-->
+            <!--android:name="com.google.android.maps.v2.API_KEY"-->
+            <!--android:value="AIzaSyA5aEMsoQQPpvB8_u4ycSJloUjNi7dlkc4" />-->
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAfL1aWnqR_mFhvt8lKDRlnzWXMxjtJLoU" />
+>>>>>>> origin/thomas
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -31,6 +42,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- The following two permissions are not required to use
@@ -38,6 +50,21 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
+=======
+    <!--Gmap API-->
+
+    <permission
+        android:name="com.tutos.android.gmapv2.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.tutos.android.gmapv2.permission.MAPS_RECEIVE" />
+    <!-- Permission permettant de vérifier l'état de la connexion -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Permission pour stocker des données en cache de la map -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+>>>>>>> origin/thomas
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true"/>

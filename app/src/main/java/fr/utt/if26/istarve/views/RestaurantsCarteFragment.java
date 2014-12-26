@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+<<<<<<< HEAD
 import com.google.android.gms.maps.MapFragment;
+=======
+>>>>>>> origin/thomas
 import com.google.android.gms.maps.SupportMapFragment;
 
 import fr.utt.if26.istarve.R;
@@ -15,6 +18,8 @@ import fr.utt.if26.istarve.R;
  * Created by Thomas on 17/12/2014.
  */
 public class RestaurantsCarteFragment extends android.support.v4.app.Fragment {
+    private static final String TAG = RestaurantsCarteFragment.class.getSimpleName();
+
     public RestaurantsCarteFragment() {
 
     }
@@ -27,9 +32,17 @@ public class RestaurantsCarteFragment extends android.support.v4.app.Fragment {
         return RestaurantCarteView;
     }
 
+<<<<<<< HEAD
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+=======
+    // onDestroyView() Needed to allow switching back to the map tab and avoid the duplicate id error
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.v(TAG, "HEreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+>>>>>>> origin/thomas
         SupportMapFragment f = (SupportMapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         if (f != null)
