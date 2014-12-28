@@ -31,7 +31,7 @@ public class HttpUtils {
 
     private int mhttpMethod;
     private String mUrl;
-    private JSONObject mParams = null;
+    private JSONObject mParams = new JSONObject();
     private Context mContext;
 
     public static final int HTTP_GET_REQUEST = 0;
@@ -48,6 +48,8 @@ public class HttpUtils {
             Iterator it = params.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry)it.next();
+                Log.v(TAG, pairs.getKey().toString());
+                Log.v(TAG, pairs.getValue().toString());
                 try {
                     mParams.accumulate(pairs.getKey().toString(), pairs.getValue());
                 } catch (JSONException e) {

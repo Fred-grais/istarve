@@ -12,6 +12,7 @@ import android.util.Log;
 public class Gps {
 
     private static Context mContext;
+    private static final String TAG = Gps.class.getSimpleName();
 
     public Gps(Context context){
         mContext = context;
@@ -20,6 +21,7 @@ public class Gps {
     public Location getLocation(){
         LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        Log.v(TAG, locationManager.toString());
         return location;
     }
 
@@ -28,7 +30,9 @@ public class Gps {
         Location lRestaurant= new Location("r");
         lRestaurant.setLatitude(latitude);
         lRestaurant.setLongitude(longitude);
-        Log.v("oki",Float.toString(getLocation().distanceTo(lRestaurant)/1000));
-    return getLocation().distanceTo(lRestaurant)/1000;
+        getLocation();
+//        Log.v(TAG,Float.toString(getLocation().distanceTo(lRestaurant)/1000));
+//        return getLocation().distanceTo(lRestaurant)/1000;
+        return 20;
     }
 }

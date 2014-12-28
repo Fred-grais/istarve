@@ -12,6 +12,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -60,7 +61,7 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
             HttpResponse response = new HttpUtils(mhttpMethod, url, mParams, mContext).executeRequest();
             Integer statusCode = response.getStatusLine().getStatusCode();
             Log.v(TAG, statusCode.toString());
-            if ((statusCode > 200 && statusCode < 401) || (statusCode > 401)) {
+            if ((statusCode > 201 && statusCode < 401) || (statusCode > 401)) {
                 try {
                     ((JSONObject)obj.get(0)).accumulate("status_code", HTTP_REQUEST_FAILED);
                 } catch (JSONException e) {
@@ -69,14 +70,16 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
             }else{
                 json = EntityUtils.toString(response.getEntity(), "utf8");
                 try {
-//                    String data = "{ ... }";
-//                    Object json = new JSONTokener(data).nextValue();
-//                    if (json instanceof JSONObject)
-//                    //you have an object
-//                    else if (json instanceof JSONArray)
-//                        //you have an array
-                    JSONArray responseObj = new JSONArray(json);
-                    obj.put(responseObj);
+                    Object jsonData = new JSONTokener(json).nextValue();
+                    if (jsonData instanceof JSONObject){
+                        JSONObject responseObj = new JSONObject(json);
+                        obj.put(responseObj);
+                    }
+                    else if (jsonData instanceof JSONArray){
+                        JSONArray responseObj = new JSONArray(json);
+                        obj.put(responseObj);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

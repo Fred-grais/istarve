@@ -53,7 +53,6 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
         try {
             HttpResponse response = buildRequest();
             Integer statusCode = response.getStatusLine().getStatusCode();
-            Log.v(TAG, statusCode.toString());
             if ((statusCode > 200 && statusCode < 401) || (statusCode > 401)) {
                 try {
                     obj.accumulate("status_code", HTTP_REQUEST_FAILED);
@@ -133,12 +132,10 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
             Iterator it = mParams.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry)it.next();
-                System.out.println(pairs.getKey() + " = " + pairs.getValue());
                 jsonObject.accumulate(pairs.getKey().toString(), pairs.getValue());
                 it.remove(); // avoids a ConcurrentModificationException
             }
             jsonObject.accumulate("confirm_success_url", "");
-            Log.v(TAG, jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }        

@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class Restaurant implements Comparable<Restaurant>, Serializable {
     private int mId;
+    private int mRatingsAverage;
     private float mLat;
     private float mLon;
     private String mAddress;
@@ -34,6 +35,10 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
 
     public int getmId() {
         return mId;
+    }
+
+    public int getmRatingsAverage() {
+        return mRatingsAverage;
     }
 
     public float getmLat() {
@@ -64,7 +69,7 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         return mTypeId;
     }
 
-    public Restaurant(int id, float lat, float lon, String address, String name, String thumbnailImgUrl, String url, int typeId){
+    public Restaurant(int id, float lat, float lon, String address, String name, String thumbnailImgUrl, String url, int typeId, int ratingsAverage){
         this.mId = id;
         this.mLat = lat;
         this.mLon = lon;
@@ -73,11 +78,12 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         this.mThumbnailImgUrl = thumbnailImgUrl;
         this.mUrl = url;
         this.mTypeId = typeId;
+        this.mRatingsAverage = ratingsAverage;
     }
 
     public static Restaurant fromJson(JSONObject restaurantJSON) {
         String address = "", name = "", thumbnailImgUrl = "", url = "";
-        int id = 0, typeId = 0;
+        int id = 0, typeId = 0, ratingsAverage = 0;
         float lat = 0, lon = 0;
         try {
             id = restaurantJSON.getInt("id");
@@ -88,10 +94,11 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
             thumbnailImgUrl = restaurantJSON.get("thumbnail_img_url").toString();
             url = restaurantJSON.get("url").toString();
             typeId = restaurantJSON.getInt("type_id");
+            ratingsAverage = restaurantJSON.getInt("ratings_average");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new Restaurant(id, lat, lon, address, name, thumbnailImgUrl, url, typeId);
+        return new Restaurant(id, lat, lon, address, name, thumbnailImgUrl, url, typeId, ratingsAverage);
     }
 
 

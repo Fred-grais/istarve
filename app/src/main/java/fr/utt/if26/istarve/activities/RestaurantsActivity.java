@@ -73,7 +73,7 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
     @Override
     public void onTaskCompleted(JSONArray json) {
 
-        Log.v(TAG, "Completed: " + json.toString());
+//        Log.v(TAG, "Completed: " + json.toString());
         try {
             Gps g= new Gps(getBaseContext());
             ArrayList<String> tab= new ArrayList<String>();
@@ -81,9 +81,9 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
             for (int i = 0; i < data.length(); i++) {
                 JSONObject JSONrestaurant = data.getJSONObject(i);
                 Restaurant r = Restaurant.fromJson(JSONrestaurant);
-               r.setDistance(g.getDistance(r.getmLat(),r.getmLon()));
+                r.setDistance(g.getDistance(r.getmLat(),r.getmLon()));
                 restaurants.add(r);
-                Log.v(TAG, r.toString());
+//                Log.v(TAG, r.toString());
             }
             Collections.sort(restaurants);
             FragmentManager fm = getSupportFragmentManager();

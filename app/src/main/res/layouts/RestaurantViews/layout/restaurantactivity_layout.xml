@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<fr.utt.if26.istarve.views.RestaurantView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,10 +16,9 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="NomRestaurant"
             android:id="@+id/NomRestaurant"
+            android:layout_marginTop="34dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="69dp" />
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,19 +26,82 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Adresse"
             android:id="@+id/Adresse"
+            android:layout_marginTop="37dp"
             android:layout_below="@+id/NomRestaurant"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignLeft="@+id/note_text"
+            android:layout_alignStart="@+id/note_text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Note Moyenne"
+            android:id="@+id/average_rating"
+            android:layout_above="@+id/average_ratings_bar"
+            android:layout_centerHorizontal="true" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/average_ratings_bar"
+            android:isIndicator="true"
+            android:focusable="false"
+            android:clickable="false"
+            android:stepSize="1"
+            android:layout_above="@+id/note_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Note"
-            android:id="@+id/Note"
-            android:layout_below="@+id/Adresse"
+            android:text="Ma Note"
+            android:id="@+id/note_text"
+            android:layout_above="@+id/my_rating_bar"
+            android:layout_centerHorizontal="true" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/my_rating_bar"
+            android:layout_toEndOf="@+id/Adresse"
+            android:isIndicator="false"
+            android:clickable="true"
+            android:focusable="true"
+            android:stepSize="1"
+            android:layout_above="@+id/comment_title"
+            android:layout_alignLeft="@+id/average_ratings_bar"
+            android:layout_alignStart="@+id/average_ratings_bar" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/comment_title"
+            android:layout_above="@+id/comment_body"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/comment_body"
+            android:layout_above="@+id/submit_comment"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Envoyer"
+            android:id="@+id/submit_comment"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
     </RelativeLayout>
-</LinearLayout>
+</fr.utt.if26.istarve.views.RestaurantView>
