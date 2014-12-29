@@ -1,9 +1,11 @@
 package fr.utt.if26.istarve.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Fred-Dev on 16/12/2014.
@@ -16,6 +18,7 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
     private String mAddress;
     private String mName;
     private String mThumbnailImgUrl;
+    private ArrayList<RestaurantComment> mCommentsList = new ArrayList<RestaurantComment>();
 
     public void setDistance(Float distance) {
         this.distance = distance;
@@ -29,9 +32,6 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
     }
 
     private Float distance;
-
-    public static  final int API_FETCH_RESTAURANTS_URL = 0;
-    public static  final int API_FETCH_RESTAURANT_URL = 1;
 
     public int getmId() {
         return mId;
@@ -67,6 +67,24 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
 
     public int getmTypeId() {
         return mTypeId;
+    }
+
+    public ArrayList<RestaurantComment> getmCommentsList(){
+        return mCommentsList;
+    }
+
+    public void setmCommentsListFromJSON(JSONArray comments){
+        mCommentsList.clear();
+        for (int i = 0; i < comments.length(); i++) {
+            JSONObject JSONrestaurantComment = null;
+            try {
+                JSONrestaurantComment = comments.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            RestaurantComment comment = RestaurantComment.fromJson(JSONrestaurantComment);
+            mCommentsList.add(comment);
+        }
     }
 
     public Restaurant(int id, float lat, float lon, String address, String name, String thumbnailImgUrl, String url, int typeId, int ratingsAverage){

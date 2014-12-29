@@ -27,16 +27,20 @@ public class UrlGeneratorUtils {
         return HOST + String.format("/restaurants/%s/ratings", restaurant_id);
     }
 
-    static public String updateRestaurantRating(int restaurant_id, int rating_id){
-        return HOST + String.format("/restaurants/%s/ratings/%s", restaurant_id, rating_id);
+    static public String getRestaurantUserRating(int restaurant_id){
+        return HOST + String.format("/restaurants/%s/ratings/user_rating", restaurant_id);
     }
 
     static public String createRestaurantComment(int restaurant_id){
         return HOST + String.format("/restaurants/%s/comments", restaurant_id);
     }
 
-    static public String updateRestaurantComment(int restaurant_id, int comment_id){
-        return HOST + String.format("/restaurants/%s/comments/%s", restaurant_id, comment_id);
+    static public String getRestaurantComments(int restaurant_id){
+        return HOST + String.format("/restaurants/%s/comments", restaurant_id);
+    }
+
+    static public String getRestaurantUserComment(int restaurant_id){
+        return HOST + String.format("/restaurants/%s/comments/user_comment", restaurant_id);
     }
 
 }

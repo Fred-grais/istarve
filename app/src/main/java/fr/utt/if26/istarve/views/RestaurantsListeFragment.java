@@ -3,6 +3,7 @@ package fr.utt.if26.istarve.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import fr.utt.if26.istarve.utils.Gps;
  * Created by Thomas on 16/12/2014.
  */
 public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
+
+    private static final String TAG = RestaurantsListeFragment.class.getSimpleName();
 
     public RestaurantsListeFragment() {
     }
@@ -49,6 +52,7 @@ public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
                                     int position, long id) {
                 Intent intent = new Intent(getActivity(), RestaurantActivity.class);
                 Restaurant r=((RestaurantsActivity) getActivity()).getRestaurants().get(position);
+                Log.v(TAG, String.valueOf(r.getmName()));
                 intent.putExtra("restaurant",r);
                 startActivity(intent);
             }
