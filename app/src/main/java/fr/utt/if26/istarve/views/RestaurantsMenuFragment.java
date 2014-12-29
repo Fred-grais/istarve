@@ -19,6 +19,7 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
 
     private static final int LISTE_STATE = 0x1;
     private static final int CARTE_STATE = 0x2;
+    private static final int DERNIERS_RESTAUS_STATE = 0x3;
 
     private int mTabState;
 
@@ -39,6 +40,8 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
         // to keep the code simple.
         Button btn_Liste = (Button) view.findViewById(R.id.buttonListe);
         Button btn_Carte = (Button) view.findViewById(R.id.buttonCarte);
+        Button btn_DerniersRestaus= (Button) view.findViewById(R.id.buttonDerniersRestaus);
+
 
         btn_Liste.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +56,14 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 // Switch the tab content to display the grid view.
                 gotoCarteRestaurantsView();
+            }
+        });
+
+        btn_DerniersRestaus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Switch the tab content to display the grid view.
+                gotoDerniersRestaurantsView();
             }
         });
 
@@ -93,6 +104,22 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
             if (fm != null) {
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.replace(R.id.restaurantslayoutcontent, new RestaurantsCarteFragment());
+                ft.commit();
+            }
+        }
+
+    }
+
+    public void gotoDerniersRestaurantsView() {
+
+        if (mTabState != DERNIERS_RESTAUS_STATE) {
+            mTabState = DERNIERS_RESTAUS_STATE;
+
+            FragmentManager fm = getFragmentManager();
+
+            if (fm != null) {
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.restaurantslayoutcontent, new DerniersRestaurantsFragment());
                 ft.commit();
             }
         }

@@ -5,15 +5,21 @@
     android:weightSum="1">
 
     <Button
-        android:layout_width="197dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Liste"
         android:id="@+id/buttonListe" />
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="135dp"
         android:layout_height="wrap_content"
         android:text="Carte"
         android:id="@+id/buttonCarte" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dernières visites"
+        android:id="@+id/buttonDerniersRestaus" />
 
 </LinearLayout>

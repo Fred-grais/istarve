@@ -91,7 +91,7 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         this.mId = id;
         this.mLat = lat;
         this.mLon = lon;
-        this.mAddress = address;
+        this.mAddress = "test";
         this.mName = name;
         this.mThumbnailImgUrl = thumbnailImgUrl;
         this.mUrl = url;

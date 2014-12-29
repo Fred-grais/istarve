@@ -25,6 +25,7 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
+import fr.utt.if26.istarve.utils.DerniersRestaurantBDD;
 import fr.utt.if26.istarve.utils.DialogUtil;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
@@ -68,6 +69,10 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
 
         Intent intent = getIntent();
         restaurant = (Restaurant) intent.getSerializableExtra("restaurant");
+        DerniersRestaurantBDD derniersRestaurantBDD = new DerniersRestaurantBDD(getBaseContext());
+        derniersRestaurantBDD.open();
+        derniersRestaurantBDD.insertRestaurant(restaurant);
+        derniersRestaurantBDD.close();
         setContentView(R.layout.restaurantactivity_layout);
         FragmentManager fm = getSupportFragmentManager();
         RestaurantMenuFragment tabFragment = (RestaurantMenuFragment) fm.findFragmentById(R.id.restaurantMenuFragment);
