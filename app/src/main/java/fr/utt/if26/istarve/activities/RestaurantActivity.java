@@ -19,6 +19,7 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
+import fr.utt.if26.istarve.utils.DerniersRestaurantBDD;
 import fr.utt.if26.istarve.utils.DialogUtil;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
@@ -47,6 +48,11 @@ public class RestaurantActivity extends Activity implements OnTaskCompleted{
         t2.setText(restaurant.getmAddress());
         RatingBar averageRatingsBar = (RatingBar)findViewById(R.id.average_ratings_bar);
         averageRatingsBar.setRating(restaurant.getmRatingsAverage());
+        DerniersRestaurantBDD derniersRestaurantBDD = new DerniersRestaurantBDD(getBaseContext());
+        derniersRestaurantBDD.open();
+        derniersRestaurantBDD.insertRestaurant(restaurant);
+        derniersRestaurantBDD.close();
+
     }
 
     private RestaurantView.ViewListener viewListener = new RestaurantView.ViewListener() {
