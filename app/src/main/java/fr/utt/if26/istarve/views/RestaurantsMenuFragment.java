@@ -41,7 +41,7 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
         Button btn_Liste = (Button) view.findViewById(R.id.buttonListe);
         Button btn_Carte = (Button) view.findViewById(R.id.buttonCarte);
         Button btn_DerniersRestaus = (Button) view.findViewById(R.id.buttonDerniersRestaus);
-        Button btn_FavorisRestaus = (Button) view.findViewById(R.id.buttonFavorisRestaus);
+//        Button btn_FavorisRestaus = (Button) view.findViewById(R.id.buttonFavorisRestaus);
 
 
 
@@ -69,13 +69,13 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        btn_FavorisRestaus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Switch the tab content to display the grid view.
-                gotoFavorisRestaurantsView();
-            }
-        });
+//        btn_FavorisRestaus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Switch the tab content to display the grid view.
+//                gotoFavorisRestaurantsView();
+//            }
+//        });
 
         return view;
     }

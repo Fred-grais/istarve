@@ -64,7 +64,6 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
         // to keep the code simple.
         Button btn_show = (Button) view.findViewById(R.id.button_show_restaurant);
         Button btn_rate = (Button) view.findViewById(R.id.button_rate_restaurant);
-        Button btn_addFavorite = (Button) view.findViewById(R.id.buttonAddFavorites);
 
         btn_show.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,17 +80,17 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
                 gotoRateView();
             }
         });
-        btn_addFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Add a favorite restaurant
-               RestaurantActivity restaurantActivity = (RestaurantActivity) getActivity();
-                restaurantActivity.getFavorisRestaurantsBDD().open();
-                restaurantActivity.getFavorisRestaurantsBDD().insertRestaurant(restaurantActivity.getRestaurant());
-                restaurantActivity.getFavorisRestaurantsBDD().close();
-
-            }
-        });
+//        btn_addFavorite.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Add a favorite restaurant
+//               RestaurantActivity restaurantActivity = (RestaurantActivity) getActivity();
+//                restaurantActivity.getFavorisRestaurantsBDD().open();
+//                restaurantActivity.getFavorisRestaurantsBDD().insertRestaurant(restaurantActivity.getRestaurant());
+//                restaurantActivity.getFavorisRestaurantsBDD().close();
+//
+//            }
+//        });
 
         return view;
     }
