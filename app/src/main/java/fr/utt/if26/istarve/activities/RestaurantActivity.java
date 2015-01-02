@@ -1,35 +1,28 @@
 package fr.utt.if26.istarve.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
-import fr.utt.if26.istarve.utils.DerniersRestaurantBDD;
+import fr.utt.if26.istarve.utils.DerniersRestaurantsBDD;
 import fr.utt.if26.istarve.utils.DialogUtil;
+import fr.utt.if26.istarve.utils.FavorisRestaurantsBDD;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
-import fr.utt.if26.istarve.views.LoginMenuFragment;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantMenuFragment;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantRatingFragment;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantShowFragment;
@@ -38,10 +31,18 @@ import fr.utt.if26.istarve.views.restaurant_views.RestaurantShowFragment;
  * Created by Thomas on 26/12/2014.
  */
 public class RestaurantActivity extends FragmentActivity implements OnTaskCompleted{
+    public FavorisRestaurantsBDD getFavorisRestaurantsBDD() {
+        return favorisRestaurantsBDD;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
 
     private Restaurant restaurant;
     private RestaurantMenuFragment mMenuFragment;
     private static final String TAG = RestaurantActivity.class.getSimpleName();
+    private FavorisRestaurantsBDD favorisRestaurantsBDD;
 
     public static final int API_EVENT_RATING_CREATED = 1;
     private static final int API_EVENT_RATING_UPDATED = 2;
@@ -76,10 +77,11 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
 
         Intent intent = getIntent();
         restaurant = (Restaurant) intent.getSerializableExtra("restaurant");
-        DerniersRestaurantBDD derniersRestaurantBDD = new DerniersRestaurantBDD(getBaseContext());
+        DerniersRestaurantsBDD derniersRestaurantBDD = new DerniersRestaurantsBDD(getBaseContext());
         derniersRestaurantBDD.open();
         derniersRestaurantBDD.insertRestaurant(restaurant);
         derniersRestaurantBDD.close();
+        favorisRestaurantsBDD= new FavorisRestaurantsBDD(this.getBaseContext());
         setContentView(R.layout.restaurantactivity_layout);
         FragmentManager fm = getSupportFragmentManager();
         mMenuFragment = (RestaurantMenuFragment) fm.findFragmentById(R.id.restaurantMenuFragment);

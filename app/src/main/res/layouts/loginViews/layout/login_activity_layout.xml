@@ -6,7 +6,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    >
+    android:weightSum="1"
+    android:background="#ff960012">
 
     <!-- Login progress -->
     <ProgressBar
@@ -20,7 +21,7 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="329dp"
         >
         <LinearLayout
             android:orientation="vertical"
@@ -44,5 +45,20 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_alignWithParentIfMissing="false"
+            android:src="@drawable/r_acc"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
 </LinearLayout>
 <!--</fr.utt.if26.istarve.views.LoginView>-->

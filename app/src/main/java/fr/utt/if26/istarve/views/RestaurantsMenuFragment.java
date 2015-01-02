@@ -2,7 +2,6 @@ package fr.utt.if26.istarve.views;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
     private static final int LISTE_STATE = 0x1;
     private static final int CARTE_STATE = 0x2;
     private static final int DERNIERS_RESTAUS_STATE = 0x3;
+    private static final int FAVORIS_RESTAUS_STATE = 0x4;
 
     private int mTabState;
 
@@ -27,7 +27,7 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
 
     }
 
-    public RestaurantsMenuFragment(){
+    public RestaurantsMenuFragment() {
     }
 
     @Override
@@ -40,7 +40,9 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
         // to keep the code simple.
         Button btn_Liste = (Button) view.findViewById(R.id.buttonListe);
         Button btn_Carte = (Button) view.findViewById(R.id.buttonCarte);
-        Button btn_DerniersRestaus= (Button) view.findViewById(R.id.buttonDerniersRestaus);
+        Button btn_DerniersRestaus = (Button) view.findViewById(R.id.buttonDerniersRestaus);
+        Button btn_FavorisRestaus = (Button) view.findViewById(R.id.buttonFavorisRestaus);
+
 
 
         btn_Liste.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +66,14 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 // Switch the tab content to display the grid view.
                 gotoDerniersRestaurantsView();
+            }
+        });
+
+        btn_FavorisRestaus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Switch the tab content to display the grid view.
+                gotoFavorisRestaurantsView();
             }
         });
 
@@ -124,5 +134,20 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
             }
         }
 
+    }
+
+    public void gotoFavorisRestaurantsView() {
+
+        if (mTabState != FAVORIS_RESTAUS_STATE) {
+            mTabState = FAVORIS_RESTAUS_STATE;
+
+            FragmentManager fm = getFragmentManager();
+
+            if (fm != null) {
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.restaurantslayoutcontent, new FavorisRestaurantsFragment());
+                ft.commit();
+            }
+        }
     }
 }
