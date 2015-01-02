@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import fr.utt.if26.istarve.R;
+import fr.utt.if26.istarve.activities.RestaurantActivity;
+import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.views.LoginFragment;
 import fr.utt.if26.istarve.views.RegisterFragment;
 
@@ -41,6 +43,7 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
         // to keep the code simple.
         Button btn_show = (Button) view.findViewById(R.id.button_show_restaurant);
         Button btn_rate = (Button) view.findViewById(R.id.button_rate_restaurant);
+        Button btn_addFavorite = (Button) view.findViewById(R.id.buttonAddFavorites);
 
         btn_show.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +58,17 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 // Switch the tab content to display the grid view.
                 gotoRateView();
+            }
+        });
+        btn_addFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Add a favorite restaurant
+               RestaurantActivity restaurantActivity = (RestaurantActivity) getActivity();
+                restaurantActivity.getFavorisRestaurantsBDD().open();
+                restaurantActivity.getFavorisRestaurantsBDD().insertRestaurant(restaurantActivity.getRestaurant());
+                restaurantActivity.getFavorisRestaurantsBDD().close();
+
             }
         });
 

@@ -56,10 +56,9 @@ public class RestaurantsCarteFragment extends android.support.v4.app.Fragment im
         map.getMap().setMyLocationEnabled(true);
         Location location = map.getMap().getMyLocation();
         Gps g = new Gps(getActivity().getBaseContext());
-
-       map.getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(g.getLocation().getLatitude(),g.getLocation().getLongitude()),5));
-
-
+        if(location!=null) {
+            map.getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(g.getLocation().getLatitude(), g.getLocation().getLongitude()), 5));
+        }
         return RestaurantCarteView;
     }
 

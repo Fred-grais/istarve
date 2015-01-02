@@ -16,29 +16,31 @@ import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.utils.DerniersRestaurantsBDD;
+import fr.utt.if26.istarve.utils.FavorisRestaurantsBDD;
 import fr.utt.if26.istarve.utils.Gps;
 
 /**
- * Created by Thomas on 29/12/2014.
+ * Created by Thomas on 02/01/2015.
  */
-public class DerniersRestaurantsFragment extends android.support.v4.app.Fragment {
+public class FavorisRestaurantsFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View RestaurantListeView = inflater.inflate(R.layout.fragment_restaurants_derniers, null);
+        View RestaurantListeView = inflater.inflate(R.layout.fragment_restaurants_favoris, null);
         ListView lv=(ListView)RestaurantListeView.findViewById(R.id.listViewRestaurants);
         RestaurantsActivity restaurantsActivity=(RestaurantsActivity) getActivity();
-        DerniersRestaurantsBDD derniersRestaurantBDD = new DerniersRestaurantsBDD(getActivity().getBaseContext());
-        derniersRestaurantBDD.open();
+        FavorisRestaurantsBDD favorisRestaurantBDD = new FavorisRestaurantsBDD(getActivity().getBaseContext());
+        favorisRestaurantBDD.open();
         ArrayList<String> tab = new ArrayList<String>();
         Gps g= new Gps(getActivity().getBaseContext());
-        ArrayList<Restaurant> restaurants = derniersRestaurantBDD.getAllRestaurants();
+        favorisRestaurantBDD.open();
+        ArrayList<Restaurant> restaurants = favorisRestaurantBDD.getAllRestaurants();
         for(Restaurant r: restaurants){
             tab.add(r.getmName()+" - ");//+. Float.toString(r.getDistance())+" Kms"
         }
-        derniersRestaurantBDD.open();
+        favorisRestaurantBDD.close();
         ArrayAdapter arrayadp =new ArrayAdapter(restaurantsActivity,  android.R.layout.simple_list_item_1,tab );
         lv.setAdapter(arrayadp);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -51,7 +53,6 @@ public class DerniersRestaurantsFragment extends android.support.v4.app.Fragment
                 startActivity(intent);
             }
         });
-
 
         return RestaurantListeView;
     }
