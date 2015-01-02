@@ -27,6 +27,16 @@
             android:id="@+id/restaurant_address"
             android:layout_below="@+id/restaurant_name"
             android:layout_centerHorizontal="true" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/favorite_switch"
+            android:layout_below="@+id/restaurant_address"
+            android:layout_centerHorizontal="true"
+            android:textOff="Not favorited"
+            android:textOn="Favorited"
+            android:checked="false" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +44,7 @@
             android:text="Note Moyenne"
             android:id="@+id/average_rating"
             android:layout_marginTop="27dp"
-            android:layout_below="@+id/restaurant_address"
+            android:layout_below="@+id/favorite_switch"
             android:layout_centerHorizontal="true" />
 
         <RatingBar
@@ -61,8 +71,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/comments_list"
             android:layout_below="@+id/comments_list_label"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerHorizontal="true" />
+
+
 
 
     </RelativeLayout>

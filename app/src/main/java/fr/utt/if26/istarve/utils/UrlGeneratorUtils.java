@@ -43,4 +43,12 @@ public class UrlGeneratorUtils {
         return HOST + String.format("/restaurants/%s/comments/user_comment", restaurant_id);
     }
 
+    static public String manageRestaurantUserFavorite(int restaurant_id){
+        return HOST + String.format("/restaurants/%s/user_favorites/manage", restaurant_id);
+    }
+
+    static public String getRestaurantUserFavorite(int restaurant_id){
+        return HOST + String.format("/restaurants/%s/user_favorites", restaurant_id);
+    }
+
 }

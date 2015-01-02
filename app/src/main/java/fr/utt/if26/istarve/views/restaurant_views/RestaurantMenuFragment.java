@@ -23,9 +23,13 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
 
     private int mTabState;
 
+    public RestaurantShowFragment mShowFragment;
+    public RestaurantRatingFragment mRatingFragment;
+
     public static interface ViewListener {
         public void onSubmitNewRating(int newRating);
         public void onSubmitNewComment(String title, String body);
+        public void onManageUserFavorite();
     }
 
     public RestaurantMenuFragment(){
@@ -36,6 +40,23 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
 
         View view = inflater.inflate(R.layout.fragment_restaurant_menu, container, false);
 
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        mShowFragment = (RestaurantShowFragment) fm.findFragmentByTag("show_frag");
+        mRatingFragment = (RestaurantRatingFragment) fm.findFragmentByTag("rating_frag");
+        if(mShowFragment == null){
+            mShowFragment = new RestaurantShowFragment();
+            ft.add(R.id.restaurant_fragments_content, mShowFragment, "show_frag");
+        }
+        if(mRatingFragment == null){
+            mRatingFragment = new RestaurantRatingFragment();
+            ft.add(R.id.restaurant_fragments_content, mRatingFragment, "rating_frag");
+        }
+
+        ft.hide(mShowFragment);
+        ft.hide(mRatingFragment);
+        ft.commit();
         // Grab the tab buttons from the layout and attach event handlers. The code just uses standard
         // buttons for the tab widgets. These are bad tab widgets, design something better, this is just
         // to keep the code simple.
@@ -79,7 +100,9 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
                 // currently inside R.id.fragment_content and add the new Fragment
                 // in its place.
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.restaurant_layout_content, new RestaurantShowFragment());
+//                ft.replace(R.id.restaurant_layout_content, showFragment);
+                ft.hide(mRatingFragment);
+                ft.show(mShowFragment);
                 ft.commit();
             }
         }
@@ -94,14 +117,12 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
 
             if (fm != null) {
                 FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.restaurant_layout_content, new RestaurantRatingFragment());
+//                ft.replace(R.id.restaurant_layout_content, ratingFragment);
+                ft.hide(mShowFragment);
+                ft.show(mRatingFragment);
                 ft.commit();
             }
         }
     }
 
-    public void getRatingFragment(){
-        FragmentManager fm = getFragmentManager();
-        RestaurantRatingFragment ratingFragment = (RestaurantRatingFragment) fm.findFragmentById(R.id.restaurant_layout_content);
-    }
 }

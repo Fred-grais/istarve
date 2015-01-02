@@ -40,6 +40,7 @@ import fr.utt.if26.istarve.views.restaurant_views.RestaurantShowFragment;
 public class RestaurantActivity extends FragmentActivity implements OnTaskCompleted{
 
     private Restaurant restaurant;
+    private RestaurantMenuFragment mMenuFragment;
     private static final String TAG = RestaurantActivity.class.getSimpleName();
 
     public static final int API_EVENT_RATING_CREATED = 1;
@@ -49,6 +50,9 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
     private static final int API_EVENT_USER_COMMENT_FETCHED = 5;
     private static final int API_EVENT_USER_RATING_FETCHED = 6;
     private static final int API_EVENT_COMMENTS_LIST_FETCHED = 7;
+    private static final int API_EVENT_FAVORITE_LIST_ADDED = 8;
+    private static final int API_EVENT_FAVORITE_LIST_REMOVED = 9;
+    private static final int API_EVENT_FAVORITE_STATUS = 10;
     private static final Map<String, Integer> apiEventsMap;
     static
     {
@@ -60,6 +64,9 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         apiEventsMap.put("user_comment", API_EVENT_USER_COMMENT_FETCHED);
         apiEventsMap.put("user_rating", API_EVENT_USER_RATING_FETCHED);
         apiEventsMap.put("comments_list", API_EVENT_COMMENTS_LIST_FETCHED);
+        apiEventsMap.put("added_favorite_list", API_EVENT_FAVORITE_LIST_ADDED);
+        apiEventsMap.put("removed_favorite_list", API_EVENT_FAVORITE_LIST_REMOVED);
+        apiEventsMap.put("get_favorite_status", API_EVENT_FAVORITE_STATUS);
     }
 
     /** Called when the activity is first created. */
@@ -75,8 +82,8 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         derniersRestaurantBDD.close();
         setContentView(R.layout.restaurantactivity_layout);
         FragmentManager fm = getSupportFragmentManager();
-        RestaurantMenuFragment tabFragment = (RestaurantMenuFragment) fm.findFragmentById(R.id.restaurantMenuFragment);
-        tabFragment.gotoShowView();
+        mMenuFragment = (RestaurantMenuFragment) fm.findFragmentById(R.id.restaurantMenuFragment);
+        mMenuFragment.gotoShowView();
     }
 
     private RestaurantMenuFragment.ViewListener viewListener = new RestaurantMenuFragment.ViewListener() {
@@ -97,7 +104,17 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
             }
         }
 
+        @Override
+        public void onManageUserFavorite() {
+            manageUserFavorite();
+        }
+
     };
+
+    private void manageUserFavorite() {
+        new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.manageRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
+    }
+
     private void submitNewRating(int newRating){
         Map<String, String> params = new HashMap<String, String>();
         params.put("rating", String.valueOf(newRating));
@@ -149,26 +166,36 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
                     showAlertDialog("Commentaire pris en compte.", "Votre commentaire a été mis à jour!");
                     break;
                 case API_EVENT_USER_COMMENT_FETCHED:
-                    currentFragment = (RestaurantRatingFragment) fm.findFragmentById(R.id.restaurant_layout_content);
                     try {
-                        ((RestaurantRatingFragment)currentFragment).updateCommentFields(result.getString("title"), result.getString("body"));
+                        mMenuFragment.mRatingFragment.updateCommentFields(result.getString("title"), result.getString("body"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
                 case API_EVENT_USER_RATING_FETCHED:
-                    currentFragment = (RestaurantRatingFragment) fm.findFragmentById(R.id.restaurant_layout_content);
                     try {
-                        ((RestaurantRatingFragment)currentFragment).updateRatingBar(result.getInt("rating"));
+                        mMenuFragment.mRatingFragment.updateRatingBar(result.getInt("rating"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     break;
                 case API_EVENT_COMMENTS_LIST_FETCHED:
-                    currentFragment = (RestaurantShowFragment) fm.findFragmentById(R.id.restaurant_layout_content);
                     try {
                         restaurant.setmCommentsListFromJSON(result.getJSONArray("comments"));
-                        ((RestaurantShowFragment)currentFragment).updateCommentsList();
+                        mMenuFragment.mShowFragment.updateCommentsList();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case API_EVENT_FAVORITE_LIST_ADDED:
+                    showAlertDialog("Management Favorites List", "Vous avez ajouté ce restaurant à votre liste des favoris!");
+                    break;
+                case API_EVENT_FAVORITE_LIST_REMOVED:
+                    showAlertDialog("Management Favorites List", "Vous avez retiré ce restaurant de votre liste des favoris!");
+                    break;
+                case API_EVENT_FAVORITE_STATUS:
+                    try {
+                        mMenuFragment.mShowFragment.updateFavoriteSwitchState(result.getBoolean("state"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -212,4 +239,7 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantComments(restaurant.getmId()), null, this, this).execute((Void) null);
     }
 
+    public void getFavoriteState() {
+        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
+    }
 }

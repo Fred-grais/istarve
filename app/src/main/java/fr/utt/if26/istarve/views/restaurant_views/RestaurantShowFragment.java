@@ -4,14 +4,17 @@ package fr.utt.if26.istarve.views.restaurant_views;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -25,12 +28,15 @@ import fr.utt.if26.istarve.models.RestaurantComment;
 
 public class RestaurantShowFragment extends android.support.v4.app.Fragment {
 
+    private static final String TAG = RestaurantShowFragment.class.getSimpleName();
+
     private TextView mRestaurantName;
     private TextView mRestaurantAddress;
     private RatingBar mAverageRatingsBar;
     private ListView mCommentsList;
     private RestaurantActivity mActivity;
     private RestaurantMenuFragment.ViewListener mListener;
+    private Switch mFavoriteSwitch;
 
     public RestaurantShowFragment() {
         // Required empty public constructor
@@ -45,6 +51,7 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         mRestaurantAddress = (TextView) ShowView.findViewById(R.id.restaurant_address);
         mAverageRatingsBar = (RatingBar) ShowView.findViewById(R.id.average_ratings_bar);
         mCommentsList =(ListView)ShowView.findViewById(R.id.comments_list);
+        mFavoriteSwitch = (Switch)ShowView.findViewById(R.id.favorite_switch);
         mActivity = ((RestaurantActivity) getActivity());
         mListener = mActivity.getViewListener();
 
@@ -54,8 +61,21 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         mRestaurantAddress.setText(currentRestaurant.getmAddress());
         mAverageRatingsBar.setRating(currentRestaurant.getmRatingsAverage());
 
-        mActivity.getRestaurantComments();
         return ShowView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            mActivity.getRestaurantComments();
+            mActivity.getFavoriteState();
+        }
     }
 
 
@@ -74,7 +94,17 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
             }
         };
         mCommentsList.setAdapter(adapter);
+    }
 
+    public void updateFavoriteSwitchState(boolean state){
+        mFavoriteSwitch.setChecked(state);
+        mFavoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
+                mListener.onManageUserFavorite();
+
+            }
+        });
     }
 }
