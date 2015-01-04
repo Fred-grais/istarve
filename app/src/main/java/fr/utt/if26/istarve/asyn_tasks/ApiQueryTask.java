@@ -34,8 +34,6 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
     private int mhttpMethod;
     private Context mContext;
 
-    private static final String host = "https://istarve.herokuapp.com";
-
     public static final int HTTP_REQUEST_SUCCEEDEED = 1;
     public static final int HTTP_REQUEST_UNAUTHORIZED = 2;
     public static final int HTTP_REQUEST_FAILED = 3;
@@ -45,6 +43,7 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
     public ApiQueryTask(int httpMethod, String targetUrl, Map<String, String> params, OnTaskCompleted listener, Context context) {
         mlistener = listener;
         url = targetUrl;
+        Log.v(TAG, url);
         mParams = params;
         mhttpMethod = httpMethod;
         mContext = context;
@@ -61,7 +60,7 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
             HttpResponse response = new HttpUtils(mhttpMethod, url, mParams, mContext).executeRequest();
             Integer statusCode = response.getStatusLine().getStatusCode();
             Log.v(TAG, statusCode.toString());
-            if ((statusCode > 201 && statusCode < 401) || (statusCode > 401)) {
+            if ((statusCode > 201 && statusCode < 401) || (statusCode > 401 && statusCode < 422) || (statusCode > 422)) {
                 try {
                     ((JSONObject)obj.get(0)).accumulate("status_code", HTTP_REQUEST_FAILED);
                 } catch (JSONException e) {
@@ -98,7 +97,12 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
                         editor.commit();
                     }
                     try {
-                        ((JSONObject)obj.get(0)).accumulate("status_code", HTTP_REQUEST_SUCCEEDEED);
+                        if (statusCode == 422){
+                            ((JSONObject)obj.get(0)).accumulate("status_code", HTTP_REQUEST_FAILED);
+                        }else{
+                            ((JSONObject)obj.get(0)).accumulate("status_code", HTTP_REQUEST_SUCCEEDEED);
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

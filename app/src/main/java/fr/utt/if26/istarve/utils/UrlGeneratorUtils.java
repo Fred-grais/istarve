@@ -14,6 +14,7 @@ public class UrlGeneratorUtils {
 
 
     private static final String HOST = "https://istarve.herokuapp.com";
+//    private static final String HOST = "http://10.0.3.2:3000";
 
     static public String getAllRestaurants(){
         return HOST + "/restaurants";
@@ -49,6 +50,10 @@ public class UrlGeneratorUtils {
 
     static public String getRestaurantUserFavorite(int restaurant_id){
         return HOST + String.format("/restaurants/%s/user_favorites", restaurant_id);
+    }
+
+    static public String createRestaurantPicture(int restaurant_id){
+        return HOST + String.format("/restaurants/%s/pictures", restaurant_id);
     }
 
 }

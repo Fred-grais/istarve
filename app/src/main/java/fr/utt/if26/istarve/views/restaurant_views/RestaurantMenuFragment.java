@@ -32,6 +32,7 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
         public void onSubmitNewRating(int newRating);
         public void onSubmitNewComment(String title, String body);
         public void onManageUserFavorite();
+        public void onTakePictureRequest();
     }
 
     public RestaurantMenuFragment(){

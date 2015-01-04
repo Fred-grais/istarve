@@ -1,7 +1,10 @@
 package fr.utt.if26.istarve.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +14,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +50,9 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
     private RestaurantMenuFragment mMenuFragment;
     private static final String TAG = RestaurantActivity.class.getSimpleName();
     private FavorisRestaurantsBDD favorisRestaurantsBDD;
+    private String mCurrentPhotoPath;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     public static final int API_EVENT_RATING_CREATED = 1;
     private static final int API_EVENT_RATING_UPDATED = 2;
@@ -54,6 +64,7 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
     private static final int API_EVENT_FAVORITE_LIST_ADDED = 8;
     private static final int API_EVENT_FAVORITE_LIST_REMOVED = 9;
     private static final int API_EVENT_FAVORITE_STATUS = 10;
+    private static final int API_EVENT_RESTAURANT_PICTURE_ADDED = 11;
     private static final Map<String, Integer> apiEventsMap;
     static
     {
@@ -68,6 +79,7 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         apiEventsMap.put("added_favorite_list", API_EVENT_FAVORITE_LIST_ADDED);
         apiEventsMap.put("removed_favorite_list", API_EVENT_FAVORITE_LIST_REMOVED);
         apiEventsMap.put("get_favorite_status", API_EVENT_FAVORITE_STATUS);
+        apiEventsMap.put("restaurant_picture_added", API_EVENT_RESTAURANT_PICTURE_ADDED);
     }
 
     /** Called when the activity is first created. */
@@ -111,7 +123,59 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
             manageUserFavorite();
         }
 
+        @Override
+        public void onTakePictureRequest() {
+            dispatchTakePictureIntent();
+        }
+
     };
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+                Log.v(TAG, photoFile.getAbsolutePath());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("picture_path", mCurrentPhotoPath);
+            Log.v(TAG, params.toString());
+            new ApiQueryTask(HttpUtils.HTTP_MULTIPART_POST_REQUEST, UrlGeneratorUtils.createRestaurantPicture(restaurant.getmId()), params, this, this).execute((Void) null);
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 
     private void manageUserFavorite() {
         new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.manageRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
@@ -201,6 +265,9 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    break;
+                case API_EVENT_RESTAURANT_PICTURE_ADDED:
+                    showAlertDialog("New Picture", "Your picture has been saved");
                     break;
                 default:
                     break;

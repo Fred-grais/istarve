@@ -32,6 +32,7 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
     Map<String, String> mParams = new HashMap<String, String>();
     private OnTaskCompleted mlistener;
     private String url = "https://istarve.herokuapp.com/auth/sign_in";
+//    private String url = "http://10.0.3.2/auth/sign_in";
 
     public static final int HTTP_REQUEST_SUCCEEDEED = 1;
     public static final int HTTP_REQUEST_UNAUTHORIZED = 2;
@@ -42,6 +43,7 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
     public AuthenticationTask(String targetUrl, Map<String, String> params, OnTaskCompleted listener) {
         mlistener = listener;
         url = targetUrl;
+        Log.v(TAG, url);
         mParams = params;
     }
 

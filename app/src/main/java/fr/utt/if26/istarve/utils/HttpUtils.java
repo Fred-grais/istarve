@@ -11,13 +11,20 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MIME;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,7 +43,8 @@ public class HttpUtils {
 
     public static final int HTTP_GET_REQUEST = 0;
     public static final int HTTP_POST_REQUEST = 1;
-    public static final int HTTP_PATCH_REQUEST = 2;
+    public static final int HTTP_MULTIPART_POST_REQUEST = 2;
+    public static final int HTTP_PATCH_REQUEST = 3;
 
     private static final String TAG = HttpUtils.class.getSimpleName();
 
@@ -69,6 +77,9 @@ public class HttpUtils {
             case HTTP_POST_REQUEST:
                 response = buildPostRequest();
                 break;
+            case HTTP_MULTIPART_POST_REQUEST:
+                response = buildMultiPartPostRequest();
+                break;
             case HTTP_PATCH_REQUEST:
                 response = buildPatchRequest();
                 break;
@@ -98,6 +109,21 @@ public class HttpUtils {
         HttpResponse response = null;
         addHeadersToRequest(httpPost);
         addParams(httpPost);
+        try {
+            response = httpclient.execute(httpPost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    private HttpResponse buildMultiPartPostRequest(){
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(mUrl);
+        HttpResponse response = null;
+        addHeadersToRequest(httpPost);
+
+        addMultiPartParams(httpPost);
         try {
             response = httpclient.execute(httpPost);
         } catch (IOException e) {
@@ -141,6 +167,26 @@ public class HttpUtils {
                 e.printStackTrace();
             }
             request.setEntity(se);
+        }
+    }
+
+    private void addMultiPartParams(HttpEntityEnclosingRequestBase request){
+        if(mParams != null){
+            String boundary = "-------------" + System.currentTimeMillis();
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            builder.setBoundary(boundary);
+            request.setHeader("Content-type", "multipart/form-data; boundary="+boundary);
+            if(mParams.has("picture_path")){
+                try {
+                    File pictureFile = new File(mParams.getString("picture_path"));
+                    builder.addPart("picture", new FileBody(pictureFile, ContentType.create("image/jpeg", (Charset) null), pictureFile.getName()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            request.setEntity(builder.build());
         }
     }
 }

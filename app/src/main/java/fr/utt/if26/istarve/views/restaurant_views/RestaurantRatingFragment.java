@@ -2,8 +2,10 @@ package fr.utt.if26.istarve.views.restaurant_views;
 
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
     private EditText mCommentBody;
     private RatingBar mMyRatingBar;
     private Button mSubmitCommentButton;
+    private Button mTakePictureButton;
     private RestaurantActivity mActivity;
     private RestaurantMenuFragment.ViewListener mListener;
 
@@ -43,6 +46,7 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
         mCommentBody = (EditText) RatingView.findViewById(R.id.comment_body);
         mMyRatingBar = (RatingBar) RatingView.findViewById(R.id.my_rating_bar);
         mSubmitCommentButton = (Button) RatingView.findViewById(R.id.submit_comment);
+        mTakePictureButton = (Button) RatingView.findViewById(R.id.take_picture_btn);
         mActivity = ((RestaurantActivity) getActivity());
         mListener = mActivity.getViewListener();
 
@@ -61,6 +65,13 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
                 String title = mCommentTitle.getText().toString();
                 String body = mCommentBody.getText().toString();
                 mListener.onSubmitNewComment(title, body);
+            }
+        });
+
+        mTakePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               mListener.onTakePictureRequest();
             }
         });
         mActivity.getUserRatingAndComments();
