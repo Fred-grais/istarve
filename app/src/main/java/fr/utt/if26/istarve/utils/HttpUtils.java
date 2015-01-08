@@ -31,9 +31,6 @@ import java.util.Map;
 
 import fr.utt.if26.istarve.activities.LoginActivity;
 
-/**
- * Created by Fred-Dev on 06/12/2014.
- */
 public class HttpUtils {
 
     private int mhttpMethod;

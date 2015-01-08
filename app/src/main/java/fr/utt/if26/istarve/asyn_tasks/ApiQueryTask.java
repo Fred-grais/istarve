@@ -23,9 +23,6 @@ import fr.utt.if26.istarve.activities.LoginActivity;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.utils.HttpUtils;
 
-/**
- * Created by Fred-Dev on 06/12/2014.
- */
 public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
 
     private Map<String, String> mParams = new HashMap<String, String>();

@@ -22,9 +22,6 @@ import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.utils.Gps;
 
-/**
- * Created by Thomas on 16/12/2014.
- */
 public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = RestaurantsListeFragment.class.getSimpleName();

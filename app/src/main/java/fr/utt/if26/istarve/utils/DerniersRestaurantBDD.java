@@ -9,9 +9,6 @@ import java.util.ArrayList;
 
 import fr.utt.if26.istarve.models.Restaurant;
 
-/**
- * Created by Thomas on 29/12/2014.
- */
 public class DerniersRestaurantBDD {
 
         private static final int VERSION_BDD = 1;

@@ -4,9 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Thomas on 29/12/2014.
- */
 public class MaBaseSQLite extends SQLiteOpenHelper {
 
     private static final String TABLE_DERNIERS_RESTAURANTS = "table_derniers_restaurants";

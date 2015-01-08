@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-/**
- * Created by Fred-Dev on 28/11/2014.
- */
 public class DialogUtil {
 
     private Activity mactivity;
@@ -23,11 +20,7 @@ public class DialogUtil {
                         // dismiss the alert
                     }
                 })
-//                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // do nothing
-//                    }
-//                })
+
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }

@@ -7,14 +7,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Created by Fred-Dev on 16/12/2014.
- */
 public class UrlGeneratorUtils {
 
 
     private static final String HOST = "https://istarve.herokuapp.com";
-//    private static final String HOST = "http://10.0.3.2:3000";
+//private static final String HOST = "http://10.0.3.2:3000";
+//    private static final String HOST = "http://10.18.4:.112:3000";
+
+    static public String forgeUrl(String url){
+        return HOST + url;
+    }
 
     static public String getAllRestaurants(){
         return HOST + "/restaurants";
@@ -55,5 +57,11 @@ public class UrlGeneratorUtils {
     static public String createRestaurantPicture(int restaurant_id){
         return HOST + String.format("/restaurants/%s/pictures", restaurant_id);
     }
+
+    static public String getRestaurantPictures(int restaurant_id){
+        return HOST + String.format("/restaurants/%s/pictures", restaurant_id);
+    }
+
+
 
 }

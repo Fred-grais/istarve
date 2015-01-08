@@ -61,6 +61,8 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         mRestaurantAddress.setText(currentRestaurant.getmAddress());
         mAverageRatingsBar.setRating(currentRestaurant.getmRatingsAverage());
 
+        mActivity.getPicturesUrl();
+
         return ShowView;
     }
 

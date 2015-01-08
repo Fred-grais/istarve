@@ -43,7 +43,8 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     private static final String LOGIN_URL = "https://istarve.herokuapp.com/auth/sign_in";
-//    private static final String LOGIN_URL = "http://10.0.3.2:3000/auth/sign_in";
+//private static final String LOGIN_URL = "http://10.0.3.2:3000/auth/sign_in";
+//    private static final String LOGIN_URL = "http://10.18.4.112:3000/auth/sign_in";
     private static final String REGISTER_URL = "https://istarve.herokuapp.com/auth";
 
     private View mLoginFormView, mProgressView;

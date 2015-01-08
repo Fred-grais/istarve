@@ -34,9 +34,6 @@ import fr.utt.if26.istarve.views.restaurant_views.RestaurantMenuFragment;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantRatingFragment;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantShowFragment;
 
-/**
- * Created by Thomas on 26/12/2014.
- */
 public class RestaurantActivity extends FragmentActivity implements OnTaskCompleted{
     public FavorisRestaurantsBDD getFavorisRestaurantsBDD() {
         return favorisRestaurantsBDD;
@@ -65,6 +62,7 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
     private static final int API_EVENT_FAVORITE_LIST_REMOVED = 9;
     private static final int API_EVENT_FAVORITE_STATUS = 10;
     private static final int API_EVENT_RESTAURANT_PICTURE_ADDED = 11;
+    private static final int API_EVENT_RESTAURANT_PICTURES_URL_FETCHED = 12;
     private static final Map<String, Integer> apiEventsMap;
     static
     {
@@ -80,6 +78,7 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         apiEventsMap.put("removed_favorite_list", API_EVENT_FAVORITE_LIST_REMOVED);
         apiEventsMap.put("get_favorite_status", API_EVENT_FAVORITE_STATUS);
         apiEventsMap.put("restaurant_picture_added", API_EVENT_RESTAURANT_PICTURE_ADDED);
+        apiEventsMap.put("pictures_url_list", API_EVENT_RESTAURANT_PICTURES_URL_FETCHED);
     }
 
     /** Called when the activity is first created. */
@@ -269,6 +268,17 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
                 case API_EVENT_RESTAURANT_PICTURE_ADDED:
                     showAlertDialog("New Picture", "Your picture has been saved");
                     break;
+                case API_EVENT_RESTAURANT_PICTURES_URL_FETCHED:
+                    Log.v(TAG, json.toString());
+                    try {
+                        restaurant.setmPicturesUrl(result.getJSONArray("pictures_url"));
+//                        Log.v(TAG, restaurant.getmPicturesUrl().toString());
+                        mMenuFragment.mPicturesFragment.populatePicturesCarousel();
+//                        mMenuFragment.mShowFragment.updateCommentsList();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -310,5 +320,9 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
 
     public void getFavoriteState() {
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
+    }
+
+    public void getPicturesUrl() {
+        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantPictures(restaurant.getmId()), null, this, this).execute((Void) null);
     }
 }

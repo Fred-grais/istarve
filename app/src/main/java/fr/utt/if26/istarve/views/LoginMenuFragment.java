@@ -11,9 +11,6 @@ import android.widget.Button;
 
 import fr.utt.if26.istarve.R;
 
-/**
- * Created by Fred-Dev on 30/11/2014.
- */
 public class LoginMenuFragment extends android.support.v4.app.Fragment {
 
     private static final int LOGIN_STATE = 0x1;

@@ -12,9 +12,6 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.LoginActivity;
 import fr.utt.if26.istarve.utils.LoginValidationsUtils;
 
-/**
- * Created by Fred-Dev on 30/11/2014.
- */
 public class RegisterFragment extends android.support.v4.app.Fragment {
 
     private Button mEmailRegisterButton;

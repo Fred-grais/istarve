@@ -1,8 +1,5 @@
 package fr.utt.if26.istarve.utils;
 
-/**
- * Created by Fred-Dev on 30/11/2014.
- */
 public class LoginValidationsUtils {
 
     public static boolean isEmailValid(String email) {

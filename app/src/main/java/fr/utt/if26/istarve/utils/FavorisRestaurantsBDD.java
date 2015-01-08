@@ -10,9 +10,6 @@ import java.util.ArrayList;
 
 import fr.utt.if26.istarve.models.Restaurant;
 
-/**
- * Created by Thomas on 02/01/2015.
- */
 public class FavorisRestaurantsBDD {
 
 

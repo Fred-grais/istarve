@@ -7,9 +7,6 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Fred-Dev on 16/12/2014.
- */
 public class Restaurant implements Comparable<Restaurant>, Serializable {
     private int mId;
     private int mRatingsAverage;
@@ -19,6 +16,7 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
     private String mName;
     private String mThumbnailImgUrl;
     private ArrayList<RestaurantComment> mCommentsList = new ArrayList<RestaurantComment>();
+    private ArrayList<String> mPicturesUrl = new ArrayList<String>();
 
     public void setDistance(Float distance) {
         this.distance = distance;
@@ -73,6 +71,10 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         return mCommentsList;
     }
 
+    public ArrayList<String> getmPicturesUrl(){
+        return mPicturesUrl;
+    }
+
     public void setmCommentsListFromJSON(JSONArray comments){
         mCommentsList.clear();
         for (int i = 0; i < comments.length(); i++) {
@@ -84,6 +86,19 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
             }
             RestaurantComment comment = RestaurantComment.fromJson(JSONrestaurantComment);
             mCommentsList.add(comment);
+        }
+    }
+
+    public void setmPicturesUrl(JSONArray picturesUrl){
+        mPicturesUrl.clear();
+        for (int i = 0; i < picturesUrl.length(); i++) {
+            String restaurantPictureUrl = null;
+            try {
+                restaurantPictureUrl = picturesUrl.getJSONObject(i).getString("small_format_url");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            mPicturesUrl.add(restaurantPictureUrl);
         }
     }
 

@@ -28,7 +28,6 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
     private EditText mCommentBody;
     private RatingBar mMyRatingBar;
     private Button mSubmitCommentButton;
-    private Button mTakePictureButton;
     private RestaurantActivity mActivity;
     private RestaurantMenuFragment.ViewListener mListener;
 
@@ -46,7 +45,6 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
         mCommentBody = (EditText) RatingView.findViewById(R.id.comment_body);
         mMyRatingBar = (RatingBar) RatingView.findViewById(R.id.my_rating_bar);
         mSubmitCommentButton = (Button) RatingView.findViewById(R.id.submit_comment);
-        mTakePictureButton = (Button) RatingView.findViewById(R.id.take_picture_btn);
         mActivity = ((RestaurantActivity) getActivity());
         mListener = mActivity.getViewListener();
 
@@ -68,12 +66,6 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        mTakePictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               mListener.onTakePictureRequest();
-            }
-        });
         mActivity.getUserRatingAndComments();
 
         return RatingView;

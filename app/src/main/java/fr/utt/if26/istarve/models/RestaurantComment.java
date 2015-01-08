@@ -7,9 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by Fred-Dev on 29/12/2014.
- */
 public class RestaurantComment {
     private int mId;
     private String mTitle;

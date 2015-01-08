@@ -18,9 +18,6 @@ import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.utils.DerniersRestaurantsBDD;
 import fr.utt.if26.istarve.utils.Gps;
 
-/**
- * Created by Thomas on 29/12/2014.
- */
 public class DerniersRestaurantsFragment extends android.support.v4.app.Fragment {
 
     @Override

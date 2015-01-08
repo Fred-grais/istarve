@@ -19,9 +19,6 @@ import fr.utt.if26.istarve.utils.DerniersRestaurantsBDD;
 import fr.utt.if26.istarve.utils.FavorisRestaurantsBDD;
 import fr.utt.if26.istarve.utils.Gps;
 
-/**
- * Created by Thomas on 02/01/2015.
- */
 public class FavorisRestaurantsFragment extends android.support.v4.app.Fragment {
 
     @Override

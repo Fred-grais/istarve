@@ -11,9 +11,6 @@ import android.widget.Button;
 
 import fr.utt.if26.istarve.R;
 
-/**
- * Created by Thomas on 16/12/2014.
- */
 public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
 
     private static final int LISTE_STATE = 0x1;

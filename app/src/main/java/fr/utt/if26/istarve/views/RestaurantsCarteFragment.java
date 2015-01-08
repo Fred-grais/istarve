@@ -23,9 +23,6 @@ import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.utils.Gps;
 
-/**
- * Created by Thomas on 17/12/2014.
- */
 public class RestaurantsCarteFragment extends android.support.v4.app.Fragment implements GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = RestaurantsCarteFragment.class.getSimpleName();

@@ -6,9 +6,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-/**
- * Created by Thomas on 26/12/2014.
- */
 public class Gps {
 
     private static Context mContext;
