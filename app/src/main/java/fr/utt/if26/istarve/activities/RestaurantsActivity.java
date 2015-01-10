@@ -151,11 +151,14 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
             r.setDistance(location.distanceTo(lRestaurant)/1000);
         }
         Collections.sort(restaurants);
+
         FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.restaurantslayoutcontent, new RestaurantsListeFragment());
-        ft.commit();
-        lm.removeUpdates(this);
+        if(fm.findFragmentById(R.id.restaurantslayoutcontent).getClass()==RestaurantsListeFragment.class) {
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.restaurantslayoutcontent, new RestaurantsListeFragment());
+            ft.commit();
+            lm.removeUpdates(this);
+        }
     }
 
     @Override
