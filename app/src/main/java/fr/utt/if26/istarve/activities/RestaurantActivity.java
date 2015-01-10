@@ -25,6 +25,7 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
+import fr.utt.if26.istarve.utils.Connexion;
 import fr.utt.if26.istarve.utils.DerniersRestaurantsBDD;
 import fr.utt.if26.istarve.utils.DialogUtil;
 import fr.utt.if26.istarve.utils.FavorisRestaurantsBDD;
@@ -35,13 +36,6 @@ import fr.utt.if26.istarve.views.restaurant_views.RestaurantRatingFragment;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantShowFragment;
 
 public class RestaurantActivity extends FragmentActivity implements OnTaskCompleted{
-    public FavorisRestaurantsBDD getFavorisRestaurantsBDD() {
-        return favorisRestaurantsBDD;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
 
     private Restaurant restaurant;
     private RestaurantMenuFragment mMenuFragment;
@@ -97,6 +91,14 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         FragmentManager fm = getSupportFragmentManager();
         mMenuFragment = (RestaurantMenuFragment) fm.findFragmentById(R.id.restaurantMenuFragment);
         mMenuFragment.gotoShowView();
+    }
+
+    public FavorisRestaurantsBDD getFavorisRestaurantsBDD() {
+        return favorisRestaurantsBDD;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     private RestaurantMenuFragment.ViewListener viewListener = new RestaurantMenuFragment.ViewListener() {
@@ -177,7 +179,16 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
     }
 
     private void manageUserFavorite() {
-        new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.manageRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
+        if(new Connexion(getBaseContext()).isOnline()) {
+            new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.manageRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
+        }
+        RestaurantActivity restaurantActivity = this;
+        restaurantActivity.getFavorisRestaurantsBDD().open();
+        if(restaurantActivity.getFavorisRestaurantsBDD().ExistRestaurant(restaurant.getmId()))
+            restaurantActivity.getFavorisRestaurantsBDD().removeRestaurantWithID(restaurant.getmId());
+        else
+        restaurantActivity.getFavorisRestaurantsBDD().insertRestaurant(restaurantActivity.getRestaurant());
+        restaurantActivity.getFavorisRestaurantsBDD().close();
     }
 
     private void submitNewRating(int newRating){

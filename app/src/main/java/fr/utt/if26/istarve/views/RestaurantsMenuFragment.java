@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import fr.utt.if26.istarve.R;
+import fr.utt.if26.istarve.utils.Connexion;
 
 public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
 
@@ -38,11 +39,18 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
         Button btn_Liste = (Button) view.findViewById(R.id.buttonListe);
         Button btn_Carte = (Button) view.findViewById(R.id.buttonCarte);
         Button btn_DerniersRestaus = (Button) view.findViewById(R.id.buttonDerniersRestaus);
-//        Button btn_FavorisRestaus = (Button) view.findViewById(R.id.buttonFavorisRestaus);
+        Button btn_FavorisRestaus = (Button) view.findViewById(R.id.buttonFavorisRestaus);
+
+        if(!new Connexion(getActivity().getBaseContext()).isOnline()) {
+            btn_Liste.setVisibility(View.INVISIBLE);
+            btn_Carte.setVisibility(View.INVISIBLE);
+            gotoFavorisRestaurantsView();
+        }
 
 
 
-        btn_Liste.setOnClickListener(new View.OnClickListener() {
+
+            btn_Liste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Switch the tab content to display the list view.
@@ -66,13 +74,13 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
             }
         });
 
-//        btn_FavorisRestaus.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Switch the tab content to display the grid view.
-//                gotoFavorisRestaurantsView();
-//            }
-//        });
+        btn_FavorisRestaus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Switch the tab content to display the grid view.
+                gotoFavorisRestaurantsView();
+            }
+        });
 
         return view;
     }

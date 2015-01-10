@@ -25,6 +25,7 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.models.RestaurantComment;
+import fr.utt.if26.istarve.utils.Connexion;
 
 public class RestaurantShowFragment extends android.support.v4.app.Fragment {
 
@@ -45,6 +46,7 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View ShowView = inflater.inflate(R.layout.fragment_restaurant_show, container, false);
         mRestaurantName = (TextView) ShowView.findViewById(R.id.restaurant_name);
@@ -54,15 +56,13 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         mFavoriteSwitch = (Switch)ShowView.findViewById(R.id.favorite_switch);
         mActivity = ((RestaurantActivity) getActivity());
         mListener = mActivity.getViewListener();
-
         Restaurant currentRestaurant = ((RestaurantActivity) getActivity()).getCurrentRestaurant();
-
         mRestaurantName.setText(currentRestaurant.getmName());
         mRestaurantAddress.setText(currentRestaurant.getmAddress());
         mAverageRatingsBar.setRating(currentRestaurant.getmRatingsAverage());
-
-        mActivity.getPicturesUrl();
-
+        if (new Connexion(mActivity.getBaseContext()).isOnline()) {
+            mActivity.getPicturesUrl();
+        }
         return ShowView;
     }
 
@@ -75,11 +75,12 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            mActivity.getRestaurantComments();
-            mActivity.getFavoriteState();
+            if(new Connexion(getActivity().getBaseContext()).isOnline()) {
+                mActivity.getRestaurantComments();
+                mActivity.getFavoriteState();
+            }
         }
     }
-
 
     public void updateCommentsList() {
         final ArrayList<RestaurantComment> commentsList = mActivity.getCurrentRestaurant().getmCommentsList();

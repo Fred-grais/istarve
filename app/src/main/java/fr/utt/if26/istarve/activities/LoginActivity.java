@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,7 @@ import java.util.Map;
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.AuthenticationTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
+import fr.utt.if26.istarve.utils.Connexion;
 import fr.utt.if26.istarve.utils.DialogUtil;
 import fr.utt.if26.istarve.views.LoginMenuFragment;
 
@@ -52,12 +54,18 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity_layout);
-        FragmentManager fm = getSupportFragmentManager();
-        LoginMenuFragment tabFragment = (LoginMenuFragment) fm.findFragmentById(R.id.fragment_tab);
-        tabFragment.gotoLoginView();
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        if(new Connexion(getBaseContext()).isOnline()){
+            setContentView(R.layout.login_activity_layout);
+            FragmentManager fm = getSupportFragmentManager();
+            LoginMenuFragment tabFragment = (LoginMenuFragment) fm.findFragmentById(R.id.fragment_tab);
+            tabFragment.gotoLoginView();
+            mLoginFormView = findViewById(R.id.login_form);
+            mProgressView = findViewById(R.id.login_progress);
+        }
+        else{
+                Intent intent = new Intent(this, RestaurantsActivity.class);
+                startActivity(intent);
+        }
     }
 
 
@@ -175,6 +183,8 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
             attemptRegister(email, password, password_confirmation);
         }
     };
+
+
 
     public LoginMenuFragment.ViewListener getViewListener(){
         return viewListener;

@@ -15,12 +15,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.models.Restaurant;
-import fr.utt.if26.istarve.utils.Gps;
 
 public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
 
@@ -35,10 +35,14 @@ public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View RestaurantListeView = inflater.inflate(R.layout.fragment_restaurants_liste, null);
         ListView lv=(ListView)RestaurantListeView.findViewById(R.id.listViewRestaurants);
+        HashMap<String, String> map;
+new HashMap<String, String>();
         RestaurantsActivity restaurantsActivity=(RestaurantsActivity) getActivity();
         ArrayList<String>tab = new ArrayList<String>();
-        Gps g= new Gps(getActivity().getBaseContext());
         for(Restaurant r:restaurantsActivity.getRestaurants()){
+            if(r.getDistance()==-1)
+            tab.add(r.getmName());
+            else
             tab.add(r.getmName()+" - "+ Float.toString(r.getDistance())+" Kms");
         }
         ArrayAdapter arrayadp =new ArrayAdapter(restaurantsActivity,  android.R.layout.simple_list_item_1,tab );

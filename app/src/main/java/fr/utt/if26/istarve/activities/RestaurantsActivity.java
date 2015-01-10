@@ -1,14 +1,20 @@
 package fr.utt.if26.istarve.activities;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,17 +27,20 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
-import fr.utt.if26.istarve.utils.Gps;
+import fr.utt.if26.istarve.utils.Connexion;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
 import fr.utt.if26.istarve.views.LoginMenuFragment;
+import fr.utt.if26.istarve.views.RestaurantsListeFragment;
 import fr.utt.if26.istarve.views.RestaurantsMenuFragment;
 
-public class RestaurantsActivity extends FragmentActivity implements OnTaskCompleted {
+public class RestaurantsActivity extends FragmentActivity implements OnTaskCompleted,LocationListener {
 
     private static final String TAG = RestaurantsActivity.class.getSimpleName();
     private ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+    LocationManager lm;
+
 
 
     public ArrayList<Restaurant> getRestaurants() {
@@ -43,7 +52,28 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.restaurantsactivity_layout);
-        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
+        if(new Connexion(getBaseContext()).isOnline())
+            new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
+        lm=(LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        lm=(LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        lm.removeUpdates(this);
+
     }
 
 
@@ -75,14 +105,13 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
 
 //        Log.v(TAG, "Completed: " + json.toString());
         try {
-            Gps g= new Gps(getBaseContext());
             ArrayList<String> tab= new ArrayList<String>();
             JSONArray data = new JSONArray(json.get(1).toString());
             for (int i = 0; i < data.length(); i++) {
                 JSONObject JSONrestaurant = data.getJSONObject(i);
                 Restaurant r = Restaurant.fromJson(JSONrestaurant);
-                r.setDistance(g.getDistance(r.getmLat(),r.getmLon()));
                 restaurants.add(r);
+
 //                Log.v(TAG, r.toString());
             }
             Collections.sort(restaurants);
@@ -113,5 +142,34 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
         Log.v(TAG, "Failed: " + json.toString());
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        for (Restaurant r:restaurants){
+            Location lRestaurant= new Location("r");
+            lRestaurant.setLatitude(r.getmLat());
+            lRestaurant.setLongitude(r.getmLon());
+            r.setDistance(location.distanceTo(lRestaurant)/1000);
+        }
+        Collections.sort(restaurants);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.restaurantslayoutcontent, new RestaurantsListeFragment());
+        ft.commit();
+        lm.removeUpdates(this);
+    }
 
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
 }

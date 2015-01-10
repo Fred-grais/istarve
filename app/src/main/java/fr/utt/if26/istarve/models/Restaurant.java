@@ -17,19 +17,20 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
     private String mThumbnailImgUrl;
     private ArrayList<RestaurantComment> mCommentsList = new ArrayList<RestaurantComment>();
     private ArrayList<String> mPicturesUrl = new ArrayList<String>();
+    private Float distance;
+    private String mUrl;
+    private int mTypeId;
 
     public void setDistance(Float distance) {
         this.distance = distance;
     }
 
-    private String mUrl;
-    private int mTypeId;
+
 
     public Float getDistance() {
         return distance;
     }
 
-    private Float distance;
 
     public int getmId() {
         return mId;
@@ -112,6 +113,7 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         this.mUrl = url;
         this.mTypeId = typeId;
         this.mRatingsAverage = ratingsAverage;
+        this.distance=(float)-1;
     }
 
     public static Restaurant fromJson(JSONObject restaurantJSON) {

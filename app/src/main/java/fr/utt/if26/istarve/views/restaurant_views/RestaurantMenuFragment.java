@@ -15,6 +15,7 @@ import android.widget.Button;
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.activities.RestaurantsActivity;
+import fr.utt.if26.istarve.utils.Connexion;
 import fr.utt.if26.istarve.views.LoginFragment;
 import fr.utt.if26.istarve.views.RegisterFragment;
 
@@ -44,10 +45,11 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_restaurant_menu, container, false);
-
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-
+        Button btn_show = (Button) view.findViewById(R.id.button_show_restaurant);
+        Button btn_rate = (Button) view.findViewById(R.id.button_rate_restaurant);
+        Button btn_pictures = (Button) view.findViewById(R.id.button_pictures_restaurant);
         mShowFragment = (RestaurantShowFragment) fm.findFragmentByTag("show_frag");
         mRatingFragment = (RestaurantRatingFragment) fm.findFragmentByTag("rating_frag");
         mPicturesFragment = (RestaurantPicturesFragment) fm.findFragmentByTag("pictures_frag");
@@ -55,26 +57,30 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
             mShowFragment = new RestaurantShowFragment();
             ft.add(R.id.restaurant_fragments_content, mShowFragment, "show_frag");
         }
-        if(mRatingFragment == null){
-            mRatingFragment = new RestaurantRatingFragment();
-            ft.add(R.id.restaurant_fragments_content, mRatingFragment, "rating_frag");
+        if(new Connexion(getActivity().getBaseContext()).isOnline()) {
+            if (mRatingFragment == null) {
+                mRatingFragment = new RestaurantRatingFragment();
+                ft.add(R.id.restaurant_fragments_content, mRatingFragment, "rating_frag");
+            }
+            if (mPicturesFragment == null) {
+                mPicturesFragment = new RestaurantPicturesFragment();
+                ft.add(R.id.restaurant_fragments_content, mPicturesFragment, "pictures_frag");
+            }
+            ft.hide(mRatingFragment);
+            ft.hide(mPicturesFragment);
         }
-        if(mPicturesFragment == null){
-            mPicturesFragment = new RestaurantPicturesFragment();
-            ft.add(R.id.restaurant_fragments_content, mPicturesFragment, "pictures_frag");
+        else{
+            btn_rate.setVisibility(View.INVISIBLE);
+            btn_pictures.setVisibility(View.INVISIBLE);
         }
-
         ft.hide(mShowFragment);
-        ft.hide(mRatingFragment);
-        ft.hide(mPicturesFragment);
+
 
         ft.commit();
         // Grab the tab buttons from the layout and attach event handlers. The code just uses standard
         // buttons for the tab widgets. These are bad tab widgets, design something better, this is just
         // to keep the code simple.
-        Button btn_show = (Button) view.findViewById(R.id.button_show_restaurant);
-        Button btn_rate = (Button) view.findViewById(R.id.button_rate_restaurant);
-        Button btn_pictures = (Button) view.findViewById(R.id.button_pictures_restaurant);
+
 
         btn_show.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,17 +105,7 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
                 gotoPicturesView();
             }
         });
-//        btn_addFavorite.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Add a favorite restaurant
-//               RestaurantActivity restaurantActivity = (RestaurantActivity) getActivity();
-//                restaurantActivity.getFavorisRestaurantsBDD().open();
-//                restaurantActivity.getFavorisRestaurantsBDD().insertRestaurant(restaurantActivity.getRestaurant());
-//                restaurantActivity.getFavorisRestaurantsBDD().close();
-//
-//            }
-//        });
+
 
         return view;
     }
@@ -133,8 +129,10 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
                 // in its place.
                 FragmentTransaction ft = fm.beginTransaction();
 //                ft.replace(R.id.restaurant_layout_content, showFragment);
-                ft.hide(mRatingFragment);
-                ft.hide(mPicturesFragment);
+                if(new Connexion(getActivity().getBaseContext()).isOnline()) {
+                    ft.hide(mRatingFragment);
+                    ft.hide(mPicturesFragment);
+                }
                 ft.show(mShowFragment);
                 ft.commit();
             }

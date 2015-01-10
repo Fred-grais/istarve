@@ -22,6 +22,12 @@
         android:text="Dernières visites"
         android:id="@+id/buttonDerniersRestaus" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restaurants favoris"
+        android:id="@+id/buttonFavorisRestaus" />
+
     <!--<Button-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->

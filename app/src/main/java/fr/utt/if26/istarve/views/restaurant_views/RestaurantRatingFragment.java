@@ -17,6 +17,7 @@ import android.widget.TextView;
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.models.Restaurant;
+import fr.utt.if26.istarve.utils.Connexion;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +39,7 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View RatingView = inflater.inflate(R.layout.fragment_restaurant_rating, container, false);
 
@@ -65,9 +67,7 @@ public class RestaurantRatingFragment extends android.support.v4.app.Fragment {
                 mListener.onSubmitNewComment(title, body);
             }
         });
-
-        mActivity.getUserRatingAndComments();
-
+            mActivity.getUserRatingAndComments();
         return RatingView;
     }
 

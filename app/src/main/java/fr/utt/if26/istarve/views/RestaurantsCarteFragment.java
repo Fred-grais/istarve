@@ -21,7 +21,6 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.models.Restaurant;
-import fr.utt.if26.istarve.utils.Gps;
 
 public class RestaurantsCarteFragment extends android.support.v4.app.Fragment implements GoogleMap.OnMarkerClickListener {
 
@@ -52,9 +51,8 @@ public class RestaurantsCarteFragment extends android.support.v4.app.Fragment im
         }
         map.getMap().setMyLocationEnabled(true);
         Location location = map.getMap().getMyLocation();
-        Gps g = new Gps(getActivity().getBaseContext());
         if(location!=null) {
-            map.getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(g.getLocation().getLatitude(), g.getLocation().getLongitude()), 5));
+            map.getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
         }
         return RestaurantCarteView;
     }

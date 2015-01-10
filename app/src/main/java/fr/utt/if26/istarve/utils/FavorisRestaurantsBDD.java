@@ -52,19 +52,23 @@ public class FavorisRestaurantsBDD {
     }
 
     public long insertRestaurant(Restaurant restaurant){
-        ContentValues values = new ContentValues();
-        values.put(COL_mId, restaurant.getmId());
-        values.put(COL_mlat, restaurant.getmLat());
-        values.put(COL_mLon, restaurant.getmLon());
-        values.put(COL_mAddress, restaurant.getmAddress());
-        values.put(COL_mName, restaurant.getmName());
-        values.put(COL_mThumbnailImgUrl, restaurant.getmThumbnailImgUrl());
-        values.put(COL_mUrl, restaurant.getmUrl());
-        values.put(COL_mTypeId, restaurant.getmTypeId());
-        values.put(COL_mRatingsAverage, restaurant.getmRatingsAverage());
-        //on insère l'objet dans la BDD via le ContentValues
+        if(!ExistRestaurant(restaurant.getmId())) {
 
-       return bdd.insert(TABLE_FAVORIS_RESTAURANTS, null, values);
+            ContentValues values = new ContentValues();
+            values.put(COL_mId, restaurant.getmId());
+            values.put(COL_mlat, restaurant.getmLat());
+            values.put(COL_mLon, restaurant.getmLon());
+            values.put(COL_mAddress, restaurant.getmAddress());
+            values.put(COL_mName, restaurant.getmName());
+            values.put(COL_mThumbnailImgUrl, restaurant.getmThumbnailImgUrl());
+            values.put(COL_mUrl, restaurant.getmUrl());
+            values.put(COL_mTypeId, restaurant.getmTypeId());
+            values.put(COL_mRatingsAverage, restaurant.getmRatingsAverage());
+            //on insère l'objet dans la BDD via le ContentValues
+
+            return bdd.insert(TABLE_FAVORIS_RESTAURANTS, null, values);
+        }
+        else return 0;
     }
 
     public int removeRestaurantWithID(int id){
@@ -76,6 +80,15 @@ public class FavorisRestaurantsBDD {
         //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
         Cursor c = bdd.query(TABLE_FAVORIS_RESTAURANTS, null,  COL_mId + "=" + id, null, null, null, null);
         return cursorToRestaurant(c);
+    }
+
+    public boolean ExistRestaurant(int id){
+        //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
+        Cursor c = bdd.query(TABLE_FAVORIS_RESTAURANTS, null,  COL_mId + "=" + id, null, null, null, null);
+        if(c.getCount()==0)
+            return false;
+        else
+        return true;
     }
 
     public void deleteFirstRow()
