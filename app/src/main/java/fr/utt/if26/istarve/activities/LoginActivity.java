@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -24,13 +23,14 @@ import java.util.Map;
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.AuthenticationTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
-import fr.utt.if26.istarve.utils.Connexion;
+import fr.utt.if26.istarve.utils.ConnexionUtils;
 import fr.utt.if26.istarve.utils.DialogUtil;
-import fr.utt.if26.istarve.views.LoginMenuFragment;
+import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
+import fr.utt.if26.istarve.views.login_views.LoginMenuFragment;
 
 
 /**
- * A login screen that offers login via email/password.
+ * Activity responsible for collecting users credentials to proceed to the authentification
  */
 public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
 
@@ -44,17 +44,12 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
     public static final String PREFS_NAME = "LoginPrefs";
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private static final String LOGIN_URL = "https://istarve.herokuapp.com/auth/sign_in";
-//private static final String LOGIN_URL = "http://10.0.3.2:3000/auth/sign_in";
-//    private static final String LOGIN_URL = "http://10.18.4.112:3000/auth/sign_in";
-    private static final String REGISTER_URL = "https://istarve.herokuapp.com/auth";
-
     private View mLoginFormView, mProgressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(new Connexion(getBaseContext()).isOnline()){
+        if(new ConnexionUtils(getBaseContext()).isOnline()){
             setContentView(R.layout.login_activity_layout);
             FragmentManager fm = getSupportFragmentManager();
             LoginMenuFragment tabFragment = (LoginMenuFragment) fm.findFragmentById(R.id.fragment_tab);
@@ -70,7 +65,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
@@ -82,10 +77,15 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         Map<String, String> params = new HashMap<String, String>();
         params.put("email", email);
         params.put("password", password);
-        mAuthTask = new AuthenticationTask(LOGIN_URL, params, this);
+        mAuthTask = new AuthenticationTask(UrlGeneratorUtils.loginUrl(), params, this);
         mAuthTask.execute((Void) null);
     }
 
+    /**
+     * Attempts to register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
     public void attemptRegister(String email, String password, String password_confirmation) {
         if (mAuthTask != null) {
             return;
@@ -95,11 +95,16 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         params.put("email", email);
         params.put("password", password);
         params.put("password_confirmation", password_confirmation);
-        mAuthTask = new AuthenticationTask(REGISTER_URL, params, this);
+        mAuthTask = new AuthenticationTask(UrlGeneratorUtils.registerUrl(), params, this);
         mAuthTask.execute((Void) null);
     }
 
-
+    /**
+     * Method callback to asynchronous request to log/register the account
+     *
+     * @param json
+     *  Is the response from the server
+     */
     @Override
     public void onTaskCompleted(JSONObject json) {
         Log.v(TAG, json.toString());
@@ -132,6 +137,9 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
 
     }
 
+    /**
+     * Method Callback called when an error 500 occurs in the server
+     */
     public void onTaskCancelled() {
         runOnUiThread(new Runnable() {
             @Override
@@ -143,6 +151,11 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         });
     }
 
+    /**
+     * Method Callback called when the API request Failed for some reason other than an internal error
+     * @param json
+     *  The reason why the request failed
+     */
     public void onTaskFailed(JSONObject json) {
         JSONArray messages = null;
         try {
@@ -168,10 +181,20 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
 
     }
 
+    /**
+     * Utility method to create a dialog window, used to display messages to the user
+     * @param title
+     *  Title of the dialog
+     * @param message
+     *  Content of the dialog
+     */
     private void showAlertDialog(String title, String message){
         new DialogUtil(this).showAlertDialog(title, message);
     }
 
+    /**
+     * Listener at which the view is attached
+     */
     private LoginMenuFragment.ViewListener viewListener = new LoginMenuFragment.ViewListener() {
         @Override
         public void onSubmitLogin(String email, String password) {
@@ -184,12 +207,15 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         }
     };
 
-
-
     public LoginMenuFragment.ViewListener getViewListener(){
         return viewListener;
     }
 
+    /**
+     * Utility method to show a spinner when attempting the login
+     * @param show
+     *  Weither to show or not the spinner
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow

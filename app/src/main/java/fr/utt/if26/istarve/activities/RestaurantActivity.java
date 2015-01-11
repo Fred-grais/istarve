@@ -25,15 +25,13 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
-import fr.utt.if26.istarve.utils.Connexion;
-import fr.utt.if26.istarve.utils.DerniersRestaurantsBDD;
+import fr.utt.if26.istarve.utils.ConnexionUtils;
+import fr.utt.if26.istarve.daos.DerniersRestaurantsBDD;
 import fr.utt.if26.istarve.utils.DialogUtil;
-import fr.utt.if26.istarve.utils.FavorisRestaurantsBDD;
+import fr.utt.if26.istarve.daos.FavorisRestaurantsBDD;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantMenuFragment;
-import fr.utt.if26.istarve.views.restaurant_views.RestaurantRatingFragment;
-import fr.utt.if26.istarve.views.restaurant_views.RestaurantShowFragment;
 
 public class RestaurantActivity extends FragmentActivity implements OnTaskCompleted{
 
@@ -179,7 +177,7 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
     }
 
     private void manageUserFavorite() {
-        if(new Connexion(getBaseContext()).isOnline()) {
+        if(new ConnexionUtils(getBaseContext()).isOnline()) {
             new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.manageRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
         }
         RestaurantActivity restaurantActivity = this;
@@ -283,9 +281,7 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
                     Log.v(TAG, json.toString());
                     try {
                         restaurant.setmPicturesUrl(result.getJSONArray("pictures_url"));
-//                        Log.v(TAG, restaurant.getmPicturesUrl().toString());
                         mMenuFragment.mPicturesFragment.populatePicturesCarousel();
-//                        mMenuFragment.mShowFragment.updateCommentsList();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

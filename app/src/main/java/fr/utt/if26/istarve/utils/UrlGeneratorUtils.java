@@ -1,29 +1,28 @@
 package fr.utt.if26.istarve.utils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+// UrlGeneratorUtils is responsible for creating the URL which will be used to interact with the API
 
 public class UrlGeneratorUtils {
 
 
-    private static final String HOST = "https://istarve.herokuapp.com";
-//private static final String HOST = "http://10.0.3.2:3000";
+//    private static final String HOST = "https://istarve.herokuapp.com";
+private static final String HOST = "http://10.0.3.2:3000";
 //    private static final String HOST = "http://10.18.4:.112:3000";
 
     static public String forgeUrl(String url){
         return HOST + url;
     }
 
-    static public String getAllRestaurants(){
-        return HOST + "/restaurants";
+    static public String loginUrl() {
+        return HOST + "/auth/sign_in";
     }
 
-    static public String getOneRestaurant(int restaurant_id){
-        return HOST + String.format("/restaurants/%s", restaurant_id);
+    static public String registerUrl() {
+        return HOST + "/auth";
+    }
+
+    static public String getAllRestaurants(){
+        return HOST + "/restaurants";
     }
 
     static public String createRestaurantRating(int restaurant_id){

@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/restaurantsMenuFragment"
-        android:name="fr.utt.if26.istarve.views.RestaurantsMenuFragment"
+        android:name="fr.utt.if26.istarve.views.restaurants_views.RestaurantsMenuFragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_restaurants_menu" />

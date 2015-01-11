@@ -2,22 +2,17 @@ package fr.utt.if26.istarve.views.restaurant_views;
 
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.RestaurantActivity;
-import fr.utt.if26.istarve.models.Restaurant;
-import fr.utt.if26.istarve.utils.Connexion;
 
 /**
  * A simple {@link Fragment} subclass.

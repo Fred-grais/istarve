@@ -3,21 +3,15 @@ package fr.utt.if26.istarve.views.restaurant_views;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -25,7 +19,7 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.models.RestaurantComment;
-import fr.utt.if26.istarve.utils.Connexion;
+import fr.utt.if26.istarve.utils.ConnexionUtils;
 
 public class RestaurantShowFragment extends android.support.v4.app.Fragment {
 
@@ -60,9 +54,9 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         mRestaurantName.setText(currentRestaurant.getmName());
         mRestaurantAddress.setText(currentRestaurant.getmAddress());
         mAverageRatingsBar.setRating(currentRestaurant.getmRatingsAverage());
-        if (new Connexion(mActivity.getBaseContext()).isOnline()) {
-            mActivity.getPicturesUrl();
-        }
+
+        mActivity.getFavoriteState();
+
         return ShowView;
     }
 
@@ -75,9 +69,8 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            if(new Connexion(getActivity().getBaseContext()).isOnline()) {
+            if(new ConnexionUtils(getActivity().getBaseContext()).isOnline()) {
                 mActivity.getRestaurantComments();
-                mActivity.getFavoriteState();
             }
         }
     }
@@ -100,6 +93,7 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
     }
 
     public void updateFavoriteSwitchState(boolean state){
+        mFavoriteSwitch.setOnCheckedChangeListener(null);
         mFavoriteSwitch.setChecked(state);
         mFavoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

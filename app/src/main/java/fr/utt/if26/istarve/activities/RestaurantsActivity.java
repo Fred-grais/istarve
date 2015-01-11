@@ -1,6 +1,5 @@
 package fr.utt.if26.istarve.activities;
 
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,10 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,13 +22,12 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.asyn_tasks.ApiQueryTask;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.models.Restaurant;
-import fr.utt.if26.istarve.utils.Connexion;
+import fr.utt.if26.istarve.utils.ConnexionUtils;
 import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
-import fr.utt.if26.istarve.views.LoginMenuFragment;
-import fr.utt.if26.istarve.views.RestaurantsListeFragment;
-import fr.utt.if26.istarve.views.RestaurantsMenuFragment;
+import fr.utt.if26.istarve.views.restaurants_views.RestaurantsListeFragment;
+import fr.utt.if26.istarve.views.restaurants_views.RestaurantsMenuFragment;
 
 public class RestaurantsActivity extends FragmentActivity implements OnTaskCompleted,LocationListener {
 
@@ -52,7 +46,7 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.restaurantsactivity_layout);
-        if(new Connexion(getBaseContext()).isOnline())
+        if(new ConnexionUtils(getBaseContext()).isOnline())
             new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
         lm=(LocationManager) this.getSystemService(LOCATION_SERVICE);
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))

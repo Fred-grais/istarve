@@ -30,7 +30,7 @@
 
             <fragment
                 android:id="@+id/fragment_tab"
-                android:name="fr.utt.if26.istarve.views.LoginMenuFragment"
+                android:name="fr.utt.if26.istarve.views.login_views.LoginMenuFragment"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 tools:layout="@layout/fragment_menu_login" />

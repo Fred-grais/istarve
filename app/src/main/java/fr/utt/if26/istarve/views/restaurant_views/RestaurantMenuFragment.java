@@ -1,9 +1,6 @@
 package fr.utt.if26.istarve.views.restaurant_views;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,11 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import fr.utt.if26.istarve.R;
-import fr.utt.if26.istarve.activities.RestaurantActivity;
-import fr.utt.if26.istarve.activities.RestaurantsActivity;
-import fr.utt.if26.istarve.utils.Connexion;
-import fr.utt.if26.istarve.views.LoginFragment;
-import fr.utt.if26.istarve.views.RegisterFragment;
+import fr.utt.if26.istarve.utils.ConnexionUtils;
 
 
 public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
@@ -57,7 +50,7 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
             mShowFragment = new RestaurantShowFragment();
             ft.add(R.id.restaurant_fragments_content, mShowFragment, "show_frag");
         }
-        if(new Connexion(getActivity().getBaseContext()).isOnline()) {
+        if(new ConnexionUtils(getActivity().getBaseContext()).isOnline()) {
             if (mRatingFragment == null) {
                 mRatingFragment = new RestaurantRatingFragment();
                 ft.add(R.id.restaurant_fragments_content, mRatingFragment, "rating_frag");
@@ -129,7 +122,7 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
                 // in its place.
                 FragmentTransaction ft = fm.beginTransaction();
 //                ft.replace(R.id.restaurant_layout_content, showFragment);
-                if(new Connexion(getActivity().getBaseContext()).isOnline()) {
+                if(new ConnexionUtils(getActivity().getBaseContext()).isOnline()) {
                     ft.hide(mRatingFragment);
                     ft.hide(mPicturesFragment);
                 }
