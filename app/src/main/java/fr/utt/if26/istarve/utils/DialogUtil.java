@@ -6,22 +6,25 @@ import android.content.DialogInterface;
 
 public class DialogUtil {
 
-    private Activity mactivity;
+    private Activity mActivity;
 
     public DialogUtil (Activity activity) {
-        mactivity = activity;
+        mActivity = activity;
     }
     public void showAlertDialog(String title, String message){
-        new AlertDialog.Builder(mactivity)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // dismiss the alert
-                    }
-                })
+        if(!mActivity.isFinishing()){
+            new AlertDialog.Builder(mActivity)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // dismiss the alert
+                        }
+                    })
 
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
     }
 }

@@ -70,7 +70,9 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             if(new ConnexionUtils(getActivity().getBaseContext()).isOnline()) {
+
                 mActivity.getRestaurantComments();
+
             }
         }
     }

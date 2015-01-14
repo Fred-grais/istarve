@@ -6,8 +6,8 @@ public class UrlGeneratorUtils {
 
 
 //    private static final String HOST = "https://istarve.herokuapp.com";
-private static final String HOST = "http://10.0.3.2:3000";
-//    private static final String HOST = "http://10.18.4:.112:3000";
+//private static final String HOST = "http://10.0.3.2:3000";
+    private static final String HOST = "http://10.18.1.79:3000";
 
     static public String forgeUrl(String url){
         return HOST + url;

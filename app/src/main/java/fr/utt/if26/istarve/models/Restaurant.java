@@ -4,8 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class Restaurant implements Comparable<Restaurant>, Serializable {
     private int mId;
@@ -25,12 +29,9 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         this.distance = distance;
     }
 
-
-
     public Float getDistance() {
         return distance;
     }
-
 
     public int getmId() {
         return mId;
@@ -107,8 +108,16 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         this.mId = id;
         this.mLat = lat;
         this.mLon = lon;
-        this.mAddress = "test";
-        this.mName = name;
+        // Hack to get ride of Unicode caracters not properly displayed
+        Properties p = new Properties();
+        try {
+            p.load(new StringReader("name="+name));
+            p.load(new StringReader("address="+address));
+            this.mName = p.getProperty("name");
+            this.mAddress = p.getProperty("address");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.mThumbnailImgUrl = thumbnailImgUrl;
         this.mUrl = url;
         this.mTypeId = typeId;

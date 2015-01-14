@@ -32,7 +32,7 @@ public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
         View RestaurantListeView = inflater.inflate(R.layout.fragment_restaurants_liste, null);
         ListView lv=(ListView)RestaurantListeView.findViewById(R.id.listViewRestaurants);
         HashMap<String, String> map;
-new HashMap<String, String>();
+        new HashMap<String, String>();
         RestaurantsActivity restaurantsActivity=(RestaurantsActivity) getActivity();
         ArrayList<String>tab = new ArrayList<String>();
         for(Restaurant r:restaurantsActivity.getRestaurants()){
