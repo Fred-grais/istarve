@@ -11,6 +11,9 @@ import android.widget.Button;
 
 import fr.utt.if26.istarve.R;
 
+/**
+ * View holding the fragment logic and capturing the user events for the login menu fragment
+ */
 public class LoginMenuFragment extends android.support.v4.app.Fragment {
 
     private static final int LOGIN_STATE = 0x1;
@@ -18,6 +21,9 @@ public class LoginMenuFragment extends android.support.v4.app.Fragment {
 
     private int mTabState;
 
+    /**
+     * Listener referenced in the controller
+     */
     public static interface ViewListener {
         public void onSubmitLogin(String email, String password);
         public void onSubmitRegister(String email, String password, String password_confirmation);
@@ -56,6 +62,9 @@ public class LoginMenuFragment extends android.support.v4.app.Fragment {
         return view;
     }
 
+    /**
+     * Display the login fragment
+     */
     public void gotoLoginView() {
         // mTabState keeps track of which tab is currently displaying its contents.
         // Perform a check to make sure the list tab content isn't already displaying.
@@ -80,6 +89,9 @@ public class LoginMenuFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    /**
+     * Display the register fragment
+     */
     public void gotoRegisterView() {
 
         if (mTabState != REGISTER_STATE) {

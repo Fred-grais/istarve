@@ -2,7 +2,6 @@ package fr.utt.if26.istarve.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -31,9 +30,12 @@ import java.util.Map;
 
 import fr.utt.if26.istarve.activities.LoginActivity;
 
+/**
+ * Utility responsible for Building the API calls with the proper HTTP method, HTTP Headers and params
+ */
 public class HttpUtils {
 
-    private int mhttpMethod;
+    private int mHttpMethod;
     private String mUrl;
     private JSONObject mParams = new JSONObject();
     private Context mContext;
@@ -45,16 +47,25 @@ public class HttpUtils {
 
     private static final String TAG = HttpUtils.class.getSimpleName();
 
+    /**
+     * Contructor
+     * @param httpMethod
+     *  Method that will be used HTTP_GET_REQUEST || HTTP_POST_REQUEST || HTTP_MULTIPART_POST_REQUEST || HTTP_PATCH_REQUEST
+     * @param url
+     *  Url to be called ex: UrlGeneratorUtils.getRestaurantPictures(restaurant.getmId())
+     * @param params
+     *  Params to be added to the request
+     * @param context
+     *  Context activity
+     */
     public HttpUtils (int httpMethod, String url, Map<String, String> params, Context context){
-        mhttpMethod = httpMethod;
+        mHttpMethod = httpMethod;
         mUrl = url;
         mContext = context;
         if(params != null){
             Iterator it = params.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry)it.next();
-                Log.v(TAG, pairs.getKey().toString());
-                Log.v(TAG, pairs.getValue().toString());
                 try {
                     mParams.accumulate(pairs.getKey().toString(), pairs.getValue());
                 } catch (JSONException e) {
@@ -65,9 +76,13 @@ public class HttpUtils {
         }
     }
 
+    /**
+     * Dispatch the right building method
+     * @return HttpResponse response
+     */
     public HttpResponse executeRequest(){
         HttpResponse response = null;
-        switch(mhttpMethod){
+        switch(mHttpMethod){
             case HTTP_GET_REQUEST:
                 response = buildGetRequest();
                 break;
@@ -81,12 +96,15 @@ public class HttpUtils {
                 response = buildPatchRequest();
                 break;
             default:
-                Log.v(TAG, "Method not supported: " + mhttpMethod);
                 break;
         }
         return response;
     }
 
+    /**
+     * Build then execute a GET Request
+     * @return HttpResponse response
+     */
     private HttpResponse buildGetRequest(){
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(mUrl);
@@ -100,6 +118,10 @@ public class HttpUtils {
         return response;
     }
 
+    /**
+     * Build then execute a POST Request
+     * @return HttpResponse response
+     */
     private HttpResponse buildPostRequest(){
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(mUrl);
@@ -114,6 +136,10 @@ public class HttpUtils {
         return response;
     }
 
+    /**
+     * Build then execute a MULTI PARTS POST Request
+     * @return HttpResponse response
+     */
     private HttpResponse buildMultiPartPostRequest(){
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(mUrl);
@@ -129,6 +155,10 @@ public class HttpUtils {
         return response;
     }
 
+    /**
+     * Build then execute a PATCH Request
+     * @return HttpResponse response
+     */
     private HttpResponse buildPatchRequest(){
         HttpClient httpclient = new DefaultHttpClient();
         HttpPut httpPut = new HttpPut(mUrl);
@@ -143,11 +173,13 @@ public class HttpUtils {
         return response;
     }
 
+    /**
+     * Add the correct HTTP Headers to the request
+     * @param request
+     *  request to which the headers will be added
+     */
     private void addHeadersToRequest(HttpRequestBase request){
         SharedPreferences settings = mContext.getSharedPreferences(LoginActivity.PREFS_NAME, 0);
-        Log.v(TAG, settings.getString("accessToken", ""));
-        Log.v(TAG, settings.getString("client", ""));
-        Log.v(TAG, settings.getString("uid", ""));
         request.setHeader("Accept", "application/json");
         request.setHeader("Content-type", "application/json");
         request.addHeader( "Access-Token" , settings.getString("accessToken", "") );
@@ -155,6 +187,11 @@ public class HttpUtils {
         request.addHeader( "Uid" , settings.getString("uid", "") );
     }
 
+    /**
+     * Add the params to the request
+     * @param request
+     *  request to which the params will be added     *
+     */
     private void addParams(HttpEntityEnclosingRequestBase request){
         if(mParams != null){
             StringEntity se = null;
@@ -167,6 +204,11 @@ public class HttpUtils {
         }
     }
 
+    /**
+     * Add the multi-parts params to the request
+     * @param request
+     *  request to which the milti-parts params will be added
+     */
     private void addMultiPartParams(HttpEntityEnclosingRequestBase request){
         if(mParams != null){
             String boundary = "-------------" + System.currentTimeMillis();
@@ -182,7 +224,6 @@ public class HttpUtils {
                     e.printStackTrace();
                 }
             }
-
             request.setEntity(builder.build());
         }
     }

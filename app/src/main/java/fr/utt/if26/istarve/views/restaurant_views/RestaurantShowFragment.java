@@ -21,6 +21,9 @@ import fr.utt.if26.istarve.models.Restaurant;
 import fr.utt.if26.istarve.models.RestaurantComment;
 import fr.utt.if26.istarve.utils.ConnexionUtils;
 
+/**
+ * View holding the fragment logic and capturing the user events for the restaurant show fragment
+ */
 public class RestaurantShowFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = RestaurantShowFragment.class.getSimpleName();
@@ -65,6 +68,12 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         super.onStart();
 
     }
+
+    /**
+     * Called each time the fragment become visible for the user
+     * Allow to refresh the comment list
+     * @param hidden
+     */
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -77,6 +86,9 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    /**
+     * Called by the controller to update the comments list on the view
+     */
     public void updateCommentsList() {
         final ArrayList<RestaurantComment> commentsList = mActivity.getCurrentRestaurant().getmCommentsList();
         ArrayAdapter adapter = new ArrayAdapter(this.mActivity,
@@ -94,6 +106,11 @@ public class RestaurantShowFragment extends android.support.v4.app.Fragment {
         mCommentsList.setAdapter(adapter);
     }
 
+    /**
+     * Called by the controller to update the Favorite Switch state
+     * @param state
+     *  True of false, returned by the API
+     */
     public void updateFavoriteSwitchState(boolean state){
         mFavoriteSwitch.setOnCheckedChangeListener(null);
         mFavoriteSwitch.setChecked(state);

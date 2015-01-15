@@ -12,6 +12,9 @@ import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.activities.LoginActivity;
 import fr.utt.if26.istarve.utils.LoginValidationsUtils;
 
+/**
+ * View holding the fragment logic and capturing the user events for the login fragment
+ */
 public class LoginFragment extends android.support.v4.app.Fragment {
     private Button mEmailSignInButton;
     private EditText mEmailView;

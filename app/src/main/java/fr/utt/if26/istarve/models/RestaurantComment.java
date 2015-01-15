@@ -7,12 +7,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * RestaurantComment Model
+ */
 public class RestaurantComment {
     private int mId;
     private String mTitle;
     private String mBody;
     private String mUserIdentity;
     private Date date;
+
+//================================GETTERS===========================================================
 
     public String getmTitle(){
         return mTitle;
@@ -29,7 +34,21 @@ public class RestaurantComment {
     public Date getdate(){
         return date;
     }
+//==================================================================================================
 
+    /**
+     * Contructor
+     * @param id
+     *  Comment Id
+     * @param title
+     *  Comment title
+     * @param body
+     *  Comment Body
+     * @param userIdentity
+     *  Comment user identity
+     * @param date
+     *  Comment update/creation date
+     */
     public RestaurantComment(int id, String title, String body, String userIdentity, Date date){
         this.mId = id;
         this.mTitle = title;
@@ -38,6 +57,12 @@ public class RestaurantComment {
         this.date = date;
     }
 
+    /**
+     * Create a new RestaurantComment from a JSONObject
+     * @param restaurantCommentJSON
+     *  Params for the RestaurantComment
+     * @return RestaurantComment
+     */
     public static RestaurantComment fromJson(JSONObject restaurantCommentJSON) {
         String title = "", body = "", userIdentity = "";
         Date date = null;
@@ -58,6 +83,10 @@ public class RestaurantComment {
         return new RestaurantComment(id, title, body, userIdentity, date);
     }
 
+    /**
+     * Return a formatted string for display purpose
+     * @return String
+     */
     public String getHeader(){
         return String.format("%s, the %s", this.mTitle, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.date));
     }

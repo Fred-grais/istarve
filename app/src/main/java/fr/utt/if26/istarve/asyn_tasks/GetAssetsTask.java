@@ -16,6 +16,9 @@ import java.io.InputStream;
 
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantPicturesFragment;
 
+/**
+ * Class responsible for retrieving the assets on the server, for example the restaurant pictures
+ */
 public class GetAssetsTask extends AsyncTask<Void, Void, Bitmap> {
     private static final String TAG = GetAssetsTask.class.getSimpleName();
     private String mUrl;
@@ -26,6 +29,11 @@ public class GetAssetsTask extends AsyncTask<Void, Void, Bitmap> {
         mPicturesFragment = picturesFragment;
     }
 
+    /**
+     * Perform the call on  the API and retrieve the image bitmap
+     * @param voids
+     * @return Bitmap bitmap
+     */
     @Override
     protected Bitmap doInBackground(Void... voids) {
         Bitmap bitmap = null;
@@ -39,7 +47,6 @@ public class GetAssetsTask extends AsyncTask<Void, Void, Bitmap> {
                     .execute(httpRequest);
 
             mStatusCode = response.getStatusLine().getStatusCode();
-            Log.v(TAG, mStatusCode.toString());
             HttpEntity entity = response.getEntity();
             BufferedHttpEntity b_entity = new BufferedHttpEntity(entity);
             InputStream input = b_entity.getContent();
@@ -52,6 +59,11 @@ public class GetAssetsTask extends AsyncTask<Void, Void, Bitmap> {
         return bitmap;
     }
 
+    /**
+     * Handle the Bitmap server response
+     * @param bitmap
+     *  The bitmap of the picture
+     */
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         if(mStatusCode == 200){

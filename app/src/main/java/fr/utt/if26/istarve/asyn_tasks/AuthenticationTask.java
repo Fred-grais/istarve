@@ -32,23 +32,34 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
     Map<String, String> mParams = new HashMap<String, String>();
     private OnTaskCompleted mlistener;
     private String url = "https://istarve.herokuapp.com/auth/sign_in";
-//    private String url = "http://10.0.3.2/auth/sign_in";
-
     public static final int HTTP_REQUEST_SUCCEEDEED = 1;
     public static final int HTTP_REQUEST_UNAUTHORIZED = 2;
     public static final int HTTP_REQUEST_FAILED = 3;
 
     private static final String TAG = AuthenticationTask.class.getSimpleName();
 
+    /**
+     * Constructor
+     * @param targetUrl
+     *  Url to be called
+     * @param params
+     *  Connection params
+     * @param listener
+     *  Listening controller
+     */
     public AuthenticationTask(String targetUrl, Map<String, String> params, OnTaskCompleted listener) {
         mlistener = listener;
         url = targetUrl;
-        Log.v(TAG, url);
         mParams = params;
     }
 
+    /**
+     * Responsible for calling the API then returning the result formatted
+     * @param voids
+     * @return obj
+     */
     @Override
-    protected JSONObject doInBackground(Void... params) {
+    protected JSONObject doInBackground(Void... voids) {
         Header accessToken, client, uid;
         String json = null;
         JSONObject obj = new JSONObject();
@@ -99,6 +110,10 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
         return obj;
     }
 
+    /**
+     * Handle the server response
+     * @param json
+     */
     @Override
     protected void onPostExecute(JSONObject json) {
         int status = 0;
@@ -123,6 +138,10 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
         }
     }
 
+    /**
+     * Build the POST request to log or register an account
+     * @return
+     */
     private HttpResponse buildRequest() {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(url);
@@ -159,11 +178,18 @@ public class AuthenticationTask extends AsyncTask<Void, Void, JSONObject> {
         return response;
     }
 
+    /**
+     * Called when the API call is cancelled (error 500, 422)
+     */
     @Override
     protected void onCancelled() {
         mlistener.onTaskCancelled();
     }
 
+    /**
+     * Called when the API call return an authentication error
+     * @param json
+     */
     protected void onUnauthorized(JSONObject json) {
         mlistener.onTaskFailed(json);
     }

@@ -12,7 +12,9 @@ import android.widget.Button;
 import fr.utt.if26.istarve.R;
 import fr.utt.if26.istarve.utils.ConnexionUtils;
 
-
+/**
+ * View holding the fragment logic and capturing the user events for the restaurant menu fragment
+ */
 public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
     private static final int SHOW_STATE = 0x1;
     private static final int RATING_STATE = 0x2;
@@ -24,6 +26,9 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
     public RestaurantRatingFragment mRatingFragment;
     public RestaurantPicturesFragment mPicturesFragment;
 
+    /**
+     * Listener referenced in the controller
+     */
     public static interface ViewListener {
         public void onSubmitNewRating(int newRating);
         public void onSubmitNewComment(String title, String body);
@@ -103,6 +108,9 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
         return view;
     }
 
+    /**
+     * Display the show view
+     */
     public void gotoShowView() {
         // mTabState keeps track of which tab is currently displaying its contents.
         // Perform a check to make sure the list tab content isn't already displaying.
@@ -132,6 +140,9 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    /**
+     * Display the rating view
+     */
     public void gotoRateView() {
 
         if (mTabState != RATING_STATE) {
@@ -150,6 +161,9 @@ public class RestaurantMenuFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    /**
+     * Display the pictures view
+     */
     public  void gotoPicturesView() {
         if (mTabState != PICTURES_STATE) {
             mTabState = PICTURES_STATE;

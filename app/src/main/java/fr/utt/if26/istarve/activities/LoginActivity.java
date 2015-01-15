@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 
 import org.json.JSONArray;
@@ -107,7 +106,6 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
      */
     @Override
     public void onTaskCompleted(JSONObject json) {
-        Log.v(TAG, json.toString());
         mAuthTask = null;
         showProgress(false);
         String accessToken = null, client = null, uid = null;
@@ -124,10 +122,7 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
         editor.putString("accessToken", accessToken);
         editor.putString("client", client);
         editor.putString("uid", uid);
-        editor.commit();
-        Log.v(TAG, settings.getString("accessToken", ""));
-        Log.v(TAG, settings.getString("client", ""));
-        Log.v(TAG, settings.getString("uid", ""));
+        editor.apply();
         Intent intent = new Intent(this, RestaurantsActivity.class);
         startActivity(intent);
     }
@@ -157,14 +152,6 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
      *  The reason why the request failed
      */
     public void onTaskFailed(JSONObject json) {
-        JSONArray messages = null;
-        try {
-            if(json.has("errors")){
-                messages = json.getJSONObject("errors").getJSONArray("full_messages");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -173,7 +160,6 @@ public class LoginActivity extends FragmentActivity implements OnTaskCompleted{
                 showAlertDialog("Login Error", "Your credentials are invalids, please try again.");
             }
         });
-
     }
 
     @Override

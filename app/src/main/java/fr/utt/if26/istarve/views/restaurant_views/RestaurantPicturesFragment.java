@@ -22,8 +22,7 @@ import fr.utt.if26.istarve.utils.ConnexionUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 
 /**
- * A simple {@link Fragment} subclass.
- *
+ * View holding the fragment logic and capturing the user events for the restaurant pictures fragment
  */
 public class RestaurantPicturesFragment extends android.support.v4.app.Fragment {
 
@@ -74,6 +73,9 @@ public class RestaurantPicturesFragment extends android.support.v4.app.Fragment 
         return PicturesView;
     }
 
+    /**
+     * Make the HTTP calls to retrieve each of the restaurant pictures
+     */
     public void populatePicturesCarousel() {
 
         final DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -82,12 +84,16 @@ public class RestaurantPicturesFragment extends android.support.v4.app.Fragment 
         Restaurant currentRestaurant = mActivity.getCurrentRestaurant();
         ArrayList<String> restaurantPicturesUrl = currentRestaurant.getmPicturesUrl();
         // Populate the carousel with items
-        Log.v(TAG, restaurantPicturesUrl.toString());
         for (int i = 0 ; i < restaurantPicturesUrl.size() ; ++i) {
             new GetAssetsTask(UrlGeneratorUtils.forgeUrl(restaurantPicturesUrl.get(i)), this).execute((Void) null);
         }
     }
 
+    /**
+     * Set the image in the carousel
+     * @param bitmap
+     *  bitmap of the picture returned by the API call
+     */
     public void setImageToCarouselFromUrl(Bitmap bitmap){
         Log.v(TAG, bitmap.toString());
         ImageView imageItem;

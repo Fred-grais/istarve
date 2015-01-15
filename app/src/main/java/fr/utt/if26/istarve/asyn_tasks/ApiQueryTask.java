@@ -23,6 +23,9 @@ import fr.utt.if26.istarve.activities.LoginActivity;
 import fr.utt.if26.istarve.interfaces.OnTaskCompleted;
 import fr.utt.if26.istarve.utils.HttpUtils;
 
+/**
+ * Class responsible for handling all the API calls except the authentication one
+ */
 public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
 
     private Map<String, String> mParams = new HashMap<String, String>();
@@ -37,15 +40,32 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
 
     private static final String TAG = ApiQueryTask.class.getSimpleName();
 
+    /**
+     * Contructor
+     * @param httpMethod
+     *  Method used for the call ex: HttpUtils.HTTP_GET_REQUEST
+     * @param targetUrl
+     *  Url that will be called ex: rlGeneratorUtils.getRestaurantPictures(restaurant.getmId())
+     * @param params
+     *  Params to be added to the request
+     * @param listener
+     *  Controller listening to the view
+     * @param context
+     *  Context Activity
+     */
     public ApiQueryTask(int httpMethod, String targetUrl, Map<String, String> params, OnTaskCompleted listener, Context context) {
         mlistener = listener;
         url = targetUrl;
-        Log.v(TAG, url);
         mParams = params;
         mhttpMethod = httpMethod;
         mContext = context;
     }
 
+    /**
+     * Perform the request then send the result to onPostExecute
+     * @param voids
+     * @return obj
+     */
     @Override
     protected JSONArray doInBackground(Void... voids) {
         Header accessToken;
@@ -56,7 +76,6 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
         try {
             HttpResponse response = new HttpUtils(mhttpMethod, url, mParams, mContext).executeRequest();
             Integer statusCode = response.getStatusLine().getStatusCode();
-            Log.v(TAG, statusCode.toString());
             if ((statusCode > 201 && statusCode < 401) || (statusCode > 401 && statusCode < 422) || (statusCode > 422)) {
                 try {
                     ((JSONObject)obj.get(0)).accumulate("status_code", HTTP_REQUEST_FAILED);
@@ -91,7 +110,7 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
                         SharedPreferences settings = mContext.getSharedPreferences(LoginActivity.PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString("accessToken", accessToken.getValue());
-                        editor.commit();
+                        editor.apply();
                     }
                     try {
                         if (statusCode == 422){
@@ -116,10 +135,13 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
         return obj;
     }
 
+    /**
+     * Handle the Server response
+     * @param json
+     */
     @Override
     protected void onPostExecute(JSONArray json) {
         int status = 0;
-        Log.v(TAG, json.toString());
         try {
             status = ((JSONObject)json.get(0)).getInt("status_code");
         } catch (JSONException e) {
@@ -141,11 +163,18 @@ public class ApiQueryTask extends AsyncTask<Void, Void, JSONArray> {
         }
     }
 
+    /*
+     * Called when the API call is cancelled (error 500, 422)
+     */
     @Override
     protected void onCancelled() {
         mlistener.onTaskCancelled();
     }
 
+    /**
+     * Called when the API call return an authentication error
+     * @param json
+     */
     protected void onUnauthorized(JSONArray json) {
         mlistener.onTaskFailed(json);
     }

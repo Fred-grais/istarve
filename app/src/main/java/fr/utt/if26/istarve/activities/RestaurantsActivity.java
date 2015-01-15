@@ -35,8 +35,6 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
     private ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
     LocationManager lm;
 
-
-
     public ArrayList<Restaurant> getRestaurants() {
         return restaurants;
     }
@@ -45,7 +43,7 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.restaurantsactivity_layout);
+        setContentView(R.layout.restaurants_activity_layout);
         if(new ConnexionUtils(getBaseContext()).isOnline())
             new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getAllRestaurants(), null, this, this).execute((Void) null);
         lm=(LocationManager) this.getSystemService(LOCATION_SERVICE);
@@ -96,29 +94,20 @@ public class RestaurantsActivity extends FragmentActivity implements OnTaskCompl
 
     @Override
     public void onTaskCompleted(JSONArray json) {
-
-//        Log.v(TAG, "Completed: " + json.toString());
         try {
-            ArrayList<String> tab= new ArrayList<String>();
             JSONArray data = new JSONArray(json.get(1).toString());
             for (int i = 0; i < data.length(); i++) {
                 JSONObject JSONrestaurant = data.getJSONObject(i);
                 Restaurant r = Restaurant.fromJson(JSONrestaurant);
                 restaurants.add(r);
-
-//                Log.v(TAG, r.toString());
             }
             Collections.sort(restaurants);
             FragmentManager fm = getSupportFragmentManager();
             RestaurantsMenuFragment menuFragment = (RestaurantsMenuFragment) fm.findFragmentById(R.id.restaurantsMenuFragment);
             menuFragment.gotoListeRestaurantsView();
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getOneRestaurant(1), null, this, this).execute((Void) null);
-
     }
 
     @Override

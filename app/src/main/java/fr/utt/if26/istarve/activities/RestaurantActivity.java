@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -33,12 +32,15 @@ import fr.utt.if26.istarve.utils.HttpUtils;
 import fr.utt.if26.istarve.utils.UrlGeneratorUtils;
 import fr.utt.if26.istarve.views.restaurant_views.RestaurantMenuFragment;
 
+/**
+ * Controller handling events coming from the restaurantFragments
+ */
 public class RestaurantActivity extends FragmentActivity implements OnTaskCompleted{
 
     private Restaurant restaurant;
     private RestaurantMenuFragment mMenuFragment;
     private static final String TAG = RestaurantActivity.class.getSimpleName();
-    private FavorisRestaurantsBDD favorisRestaurantsBDD;
+    private FavorisRestaurantsBDD mFavorisRestaurantsBDD;
     private String mCurrentPhotoPath;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -84,44 +86,67 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         derniersRestaurantBDD.open();
         derniersRestaurantBDD.insertRestaurant(restaurant);
         derniersRestaurantBDD.close();
-        favorisRestaurantsBDD= new FavorisRestaurantsBDD(this.getBaseContext());
-        setContentView(R.layout.restaurantactivity_layout);
+        mFavorisRestaurantsBDD = new FavorisRestaurantsBDD(this.getBaseContext());
+        setContentView(R.layout.restaurant_activity_layout);
         FragmentManager fm = getSupportFragmentManager();
         mMenuFragment = (RestaurantMenuFragment) fm.findFragmentById(R.id.restaurantMenuFragment);
         mMenuFragment.gotoShowView();
     }
 
     public FavorisRestaurantsBDD getFavorisRestaurantsBDD() {
-        return favorisRestaurantsBDD;
+        return mFavorisRestaurantsBDD;
     }
 
+    /**
+     * Return the current restaurant handled by the activity
+     * @return Restaurant restaurant
+     */
     public Restaurant getRestaurant() {
         return restaurant;
     }
 
+    /**
+     * Listener that will be used by the restaurantFragments to call methods on this activity
+     */
     private RestaurantMenuFragment.ViewListener viewListener = new RestaurantMenuFragment.ViewListener() {
 
+        /**
+         * When the user submit a new Rating
+         * @param newRating
+         *  The rating number (int)
+         */
         @Override
         public void onSubmitNewRating(int newRating) {
-            Log.v(TAG, "New note for restaurant" + restaurant.getmId() + ": " + newRating);
             submitNewRating(newRating);
         }
 
+        /**
+         * When the user submit a comment
+         * @param title
+         *  Title of the comment (String)
+         * @param body
+         *  Bedy of the comment (String)
+         */
         @Override
         public void onSubmitNewComment(String title, String body) {
             if(title.isEmpty() || body.isEmpty()){
                 showAlertDialog("Comment is empty", "Comment title and Comment body must be set");
             }else{
-                Log.v(TAG, "New Comment: " + title + body);
                 submitNewComment(title, body);
             }
         }
 
+        /**
+         * When the user click on the favorite Switch
+         */
         @Override
         public void onManageUserFavorite() {
             manageUserFavorite();
         }
 
+        /**
+         * When the user click on the Take Picture button
+         */
         @Override
         public void onTakePictureRequest() {
             dispatchTakePictureIntent();
@@ -129,6 +154,9 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
 
     };
 
+    /**
+     * Start the activity responsible for handling picture capture events
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -137,7 +165,6 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-                Log.v(TAG, photoFile.getAbsolutePath());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -150,16 +177,26 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         }
     }
 
+    /**
+     * Callback when the picture capture activity is done
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Map<String, String> params = new HashMap<String, String>();
             params.put("picture_path", mCurrentPhotoPath);
-            Log.v(TAG, params.toString());
             new ApiQueryTask(HttpUtils.HTTP_MULTIPART_POST_REQUEST, UrlGeneratorUtils.createRestaurantPicture(restaurant.getmId()), params, this, this).execute((Void) null);
         }
     }
 
+    /**
+     * Used to create the file that will contain the taken picture
+     * @return File image
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -176,41 +213,73 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
         return image;
     }
 
+    /**
+     * Perform the API call to manage the user favorite choice for the current restaurant
+     */
     private void manageUserFavorite() {
         if(new ConnexionUtils(getBaseContext()).isOnline()) {
             new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.manageRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
         }
         RestaurantActivity restaurantActivity = this;
         restaurantActivity.getFavorisRestaurantsBDD().open();
-        if(restaurantActivity.getFavorisRestaurantsBDD().ExistRestaurant(restaurant.getmId()))
+        if(restaurantActivity.getFavorisRestaurantsBDD().ExistRestaurant(restaurant.getmId())){
             restaurantActivity.getFavorisRestaurantsBDD().removeRestaurantWithID(restaurant.getmId());
-        else
-        restaurantActivity.getFavorisRestaurantsBDD().insertRestaurant(restaurantActivity.getRestaurant());
-        restaurantActivity.getFavorisRestaurantsBDD().close();
+        }else{
+            restaurantActivity.getFavorisRestaurantsBDD().insertRestaurant(restaurantActivity.getRestaurant());
+            restaurantActivity.getFavorisRestaurantsBDD().close();
+        }
     }
 
+    /**
+     * Perform the API call to create or edit the current user rating for the current restaurant
+     * @param newRating
+     *  New rating value (int)
+     */
     private void submitNewRating(int newRating){
         Map<String, String> params = new HashMap<String, String>();
         params.put("rating", String.valueOf(newRating));
-        Log.v(TAG, params.toString());
         new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.createRestaurantRating(restaurant.getmId()), params, this, this).execute((Void) null);
     }
+
+    /**
+     * Perform the API call to create or edit the current user comment about the current restaurant
+     * @param title
+     *  Title of the comment (String)
+     * @param body
+     *  Body of the comment (String)
+     */
     private void submitNewComment(String title, String body){
         Map<String, String> params = new HashMap<String, String>();
         params.put("title", title);
         params.put("body", body);
-        Log.v(TAG, params.toString());
         new ApiQueryTask(HttpUtils.HTTP_POST_REQUEST, UrlGeneratorUtils.createRestaurantComment(restaurant.getmId()), params, this, this).execute((Void) null);
     }
+
+    /**
+     * Method used to call the utility responsible to create a dialog window on screen and attaching it to the current activity
+     * Mandatory if creation of the dialog is made in a non main thread to get the correct reference of the current activity
+     * @param title
+     *  Title of the dialog window (String)
+     * @param message
+     *  Content of the dialog window (String)
+     */
     private void showAlertDialog(String title, String message){
         new DialogUtil(this).showAlertDialog(title, message);
     }
 
+    /**
+     * From OntaskCompleted Interface
+     * @param json
+     */
     @Override
     public void onTaskCompleted(JSONObject json) {
 
     }
 
+    /**
+     * From OntaskCompleted Interface
+     * @param json
+     */
     @Override
     public void onTaskCompleted(JSONArray json) {
         JSONObject result = null;
@@ -224,8 +293,6 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
             e.printStackTrace();
         }
         if(!event.isEmpty()){
-            FragmentManager fm = getSupportFragmentManager();
-            Fragment currentFragment = null;
             switch(apiEventsMap.get(event)){
                 case API_EVENT_RATING_CREATED:
                     showAlertDialog("Vote pris en compte.", "Votre vôte a été créé!");
@@ -278,7 +345,6 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
                     showAlertDialog("New Picture", "Your picture has been saved");
                     break;
                 case API_EVENT_RESTAURANT_PICTURES_URL_FETCHED:
-                    Log.v(TAG, json.toString());
                     try {
                         restaurant.setmPicturesUrl(result.getJSONArray("pictures_url"));
                         mMenuFragment.mPicturesFragment.populatePicturesCarousel();
@@ -293,42 +359,71 @@ public class RestaurantActivity extends FragmentActivity implements OnTaskComple
 
     }
 
+    /**
+     * From OntaskCompleted Interface
+     */
     @Override
     public void onTaskCancelled() {
         Log.v(TAG, "On Cancelled");
     }
 
+    /**
+     * From OntaskCompleted Interface
+     * @param json
+     */
     @Override
-    public void onTaskFailed(JSONObject json) {
+    public void onTaskFailed(JSONObject json) {}
 
-    }
-
+    /**
+     * From OntaskCompleted Interface
+     * @param json
+     */
     @Override
     public void onTaskFailed(JSONArray json) {
         Log.v(TAG, "Failed: " + json.toString());
     }
 
+    /**
+     * Return the current Restaurant
+     * @return Restaurant Restaurant
+     */
     public Restaurant getCurrentRestaurant(){
         return restaurant;
     }
 
+    /**
+     * Return the viewListener, used by the view to call methods on the activity
+     * @return RestaurantMenuFragment.ViewListener viewListener
+     */
     public RestaurantMenuFragment.ViewListener getViewListener(){
         return viewListener;
     }
 
+    /**
+     * Perform the API call to retrieve the current user comment and rating for the current restaurant
+     */
     public void getUserRatingAndComments(){
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantUserComment(restaurant.getmId()), null, this, this).execute((Void) null);
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantUserRating(restaurant.getmId()), null, this, this).execute((Void) null);
     }
 
+    /**
+     * Perform the API call to retrieve the current restaurant comments
+     */
     public void getRestaurantComments(){
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantComments(restaurant.getmId()), null, this, this).execute((Void) null);
     }
 
+    /**
+     * Perform the API call to retrieve the current user favorite status for the current restaurant
+     */
     public void getFavoriteState() {
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantUserFavorite(restaurant.getmId()), null, this, this).execute((Void) null);
     }
 
+    /**
+     * Perform the API call to retrieve the current restaurant pictures URLs
+     */
     public void getPicturesUrl() {
         new ApiQueryTask(HttpUtils.HTTP_GET_REQUEST, UrlGeneratorUtils.getRestaurantPictures(restaurant.getmId()), null, this, this).execute((Void) null);
     }

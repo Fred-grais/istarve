@@ -11,6 +11,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+/**
+ * Restaurant Model
+ */
 public class Restaurant implements Comparable<Restaurant>, Serializable {
     private int mId;
     private int mRatingsAverage;
@@ -25,10 +28,7 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
     private String mUrl;
     private int mTypeId;
 
-    public void setDistance(Float distance) {
-        this.distance = distance;
-    }
-
+//================================GETTERS===========================================================
     public Float getDistance() {
         return distance;
     }
@@ -76,6 +76,11 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
     public ArrayList<String> getmPicturesUrl(){
         return mPicturesUrl;
     }
+//==================================================================================================
+//================================SETTERS===========================================================
+    public void setDistance(Float distance) {
+    this.distance = distance;
+}
 
     public void setmCommentsListFromJSON(JSONArray comments){
         mCommentsList.clear();
@@ -104,6 +109,27 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         }
     }
 
+    /**
+     * Contructor
+     * @param id
+     *  Restaurant ID
+     * @param lat
+     *  Restaurant Latitude
+     * @param lon
+     *  Restaurant Longitude
+     * @param address
+     *  Restaurant Address
+     * @param name
+     *  Restaurant Name
+     * @param thumbnailImgUrl
+     *  Restaurant Thumbnail Url
+     * @param url
+     *  Restaurant Url
+     * @param typeId
+     *  Restaurant Type Id
+     * @param ratingsAverage
+     *  Restaurant Ratings Average
+     */
     public Restaurant(int id, float lat, float lon, String address, String name, String thumbnailImgUrl, String url, int typeId, int ratingsAverage){
         this.mId = id;
         this.mLat = lat;
@@ -125,6 +151,12 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         this.distance=(float)-1;
     }
 
+    /**
+     * Create a new Restaurant from a JSONObject
+     * @param restaurantJSON
+     *  Restaurant params
+     * @return Restaurant
+     */
     public static Restaurant fromJson(JSONObject restaurantJSON) {
         String address = "", name = "", thumbnailImgUrl = "", url = "";
         int id = 0, typeId = 0, ratingsAverage = 0;
@@ -145,7 +177,13 @@ public class Restaurant implements Comparable<Restaurant>, Serializable {
         return new Restaurant(id, lat, lon, address, name, thumbnailImgUrl, url, typeId, ratingsAverage);
     }
 
-
+    /**
+     * Used to compare 2 restaurant on their distance from the user
+     * ASC
+     * @param restaurant
+     *  Restaurant to be compared
+     * @return int
+     */
     @Override
     public int compareTo(Restaurant restaurant) {
         if (this.getDistance() < restaurant.getDistance()) return -1;
