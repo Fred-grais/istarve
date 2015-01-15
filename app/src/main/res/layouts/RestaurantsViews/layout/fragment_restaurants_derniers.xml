@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Derniers restaurants visités"
+        android:text="@string/last_restaurants_fragment_text"
         android:id="@+id/textView"
         android:textColor="#ffffffff"
         android:textAlignment="center"

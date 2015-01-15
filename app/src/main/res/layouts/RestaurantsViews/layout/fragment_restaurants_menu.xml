@@ -7,31 +7,25 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Liste"
+        android:text="@string/restaurant_menu_list_button_text"
         android:id="@+id/buttonListe" />
 
     <Button
         android:layout_width="135dp"
         android:layout_height="wrap_content"
-        android:text="Carte"
+        android:text="@string/restaurant_menu_list_button_carte"
         android:id="@+id/buttonCarte" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dernières visites"
+        android:text="@string/restaurant_menu_last_visited_button_text"
         android:id="@+id/buttonDerniersRestaus" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Restaurants favoris"
+        android:text="@string/restaurant_menu_favorites_button_text"
         android:id="@+id/buttonFavorisRestaus" />
-
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Restaurants favoris"-->
-        <!--android:id="@+id/buttonFavorisRestaus" />-->
 
 </LinearLayout>

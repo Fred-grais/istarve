@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_login_button_text">Login</string>
+    <string name="menu_register_menu_button">Register</string>
+    <string name="my_favorite_restaurants_text">Mes restaurants favoris</string>
+    <string name="closest_restaurants_text">Restaurants les plus proches</string>
+    <string name="restaurant_menu_list_button_text">Liste</string>
+    <string name="restaurant_menu_list_button_carte">Carte</string>
+    <string name="restaurant_menu_last_visited_button_text">Dernières visites</string>
+    <string name="restaurant_menu_favorites_button_text">Restaurants favoris</string>
+    <string name="restaurant_menu_profile_button_text">Profile</string>
+    <string name="restaurant_menu_rating_button_text">Réagir</string>
+    <string name="restaurant_menu_pictures_button_text">Photos</string>
+    <string name="restaurant_picture_fragment_take_picture_button_text">Prendre Photo</string>
+    <string name="restaurant_rating_fragment_my_note_text">Ma Note</string>
+    <string name="restaurant_rating_fragment_submit_comment_text">Envoyer</string>
+    <string name="restaurant_rating_fragment_my_comment_text">Mon commentaire</string>
+    <string name="restaurant_show_fragment_restaurant_name_text">NomRestaurant</string>
+    <string name="restaurant_show_fragment_restaurant_address_text">Adresse</string>
+    <string name="restaurant_show_fragment_restaurant_average_rating_text">Note Moyenne</string>
+    <string name="restaurant_show_fragment_restaurant_comments_list_text">Commentaires</string>
+    <string name="last_restaurants_fragment_text">Derniers restaurants visités</string>
+</resources>

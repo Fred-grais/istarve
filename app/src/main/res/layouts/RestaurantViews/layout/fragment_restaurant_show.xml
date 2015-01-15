@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="NomRestaurant"
+            android:text="@string/restaurant_show_fragment_restaurant_name_text"
             android:id="@+id/restaurant_name"
             android:layout_marginTop="34dp"
             android:layout_alignParentTop="true"
@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Adresse"
+            android:text="@string/restaurant_show_fragment_restaurant_address_text"
             android:id="@+id/restaurant_address"
             android:layout_below="@+id/restaurant_name"
             android:layout_centerHorizontal="true" />
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Note Moyenne"
+            android:text="@string/restaurant_show_fragment_restaurant_average_rating_text"
             android:id="@+id/average_rating"
             android:layout_marginTop="27dp"
             android:layout_below="@+id/favorite_switch"
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Commentaires"
+            android:text="@string/restaurant_show_fragment_restaurant_comments_list_text"
             android:id="@+id/comments_list_label"
             android:layout_below="@+id/average_ratings_bar"
             android:layout_centerHorizontal="true" />
@@ -72,9 +72,6 @@
             android:id="@+id/comments_list"
             android:layout_below="@+id/comments_list_label"
             android:layout_centerHorizontal="true" />
-
-
-
 
     </RelativeLayout>
 </LinearLayout>

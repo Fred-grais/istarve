@@ -8,21 +8,21 @@
     <Button
         android:layout_width="117dp"
         android:layout_height="wrap_content"
-        android:text="Profile"
+        android:text="@string/restaurant_menu_profile_button_text"
         android:id="@+id/button_show_restaurant"
         android:layout_weight="0.33" />
 
     <Button
         android:layout_width="117dp"
         android:layout_height="wrap_content"
-        android:text="Réagir"
+        android:text="@string/restaurant_menu_rating_button_text"
         android:id="@+id/button_rate_restaurant"
         android:layout_weight="0.33" />
 
     <Button
         android:layout_width="117dp"
         android:layout_height="wrap_content"
-        android:text="Photos"
+        android:text="@string/restaurant_menu_pictures_button_text"
         android:id="@+id/button_pictures_restaurant"
         android:layout_weight="0.33" />
 

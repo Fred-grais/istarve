@@ -8,13 +8,13 @@
     <Button
         android:layout_width="207dp"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/menu_login_button_text"
         android:id="@+id/button_login_frag" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/menu_register_menu_button"
         android:id="@+id/button_register_frag"
         android:layout_gravity="right" />
 

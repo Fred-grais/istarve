@@ -14,20 +14,6 @@
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_restaurant_menu" />
 
-    <!--<fragment-->
-        <!--android:id="@+id/restaurantShowFragment"-->
-        <!--android:name="fr.utt.if26.istarve.views.restaurant_views.RestaurantShowFragment"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--tools:layout="@layout/fragment_restaurant_show" />-->
-
-    <!--<fragment-->
-        <!--android:id="@+id/restaurantRatingFragment"-->
-        <!--android:name="fr.utt.if26.istarve.views.restaurant_views.RestaurantRatingFragment"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--tools:layout="@layout/fragment_restaurant_rating" />-->
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"

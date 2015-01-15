@@ -10,7 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Ma Note"
+            android:text="@string/restaurant_rating_fragment_my_note_text"
             android:id="@+id/note_text"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
@@ -19,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/my_rating_bar"
-            android:layout_toEndOf="@+id/restaurant_address"
             android:isIndicator="false"
             android:clickable="true"
             android:focusable="true"
@@ -50,7 +49,7 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Envoyer"
+            android:text="@string/restaurant_rating_fragment_submit_comment_text"
             android:id="@+id/submit_comment"
             android:layout_below="@+id/comment_body"
             android:layout_alignParentLeft="true"
@@ -60,19 +59,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Mon commentaire"
+            android:text="@string/restaurant_rating_fragment_my_comment_text"
             android:id="@+id/comment_label"
             android:layout_below="@+id/my_rating_bar"
             android:layout_centerHorizontal="true" />
-
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Prendre Photo"-->
-            <!--android:id="@+id/take_picture_btn"-->
-            <!--android:layout_marginBottom="57dp"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_centerHorizontal="true" />-->
 
     </RelativeLayout>
 </LinearLayout>
