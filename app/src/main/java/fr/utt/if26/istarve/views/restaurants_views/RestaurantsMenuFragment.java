@@ -16,6 +16,9 @@ import fr.utt.if26.istarve.views.restaurants_views.FavorisRestaurantsFragment;
 import fr.utt.if26.istarve.views.restaurants_views.RestaurantsCarteFragment;
 import fr.utt.if26.istarve.views.restaurants_views.RestaurantsListeFragment;
 
+/**
+ * View holding the fragment logic and capturing the user events for the restaurants menu fragment
+ */
 public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
 
     private static final int LISTE_STATE = 0x1;
@@ -24,10 +27,6 @@ public class RestaurantsMenuFragment extends android.support.v4.app.Fragment {
     private static final int FAVORIS_RESTAUS_STATE = 0x4;
 
     private int mTabState;
-
-    public static interface ViewListener {
-
-    }
 
     public RestaurantsMenuFragment() {
     }

@@ -7,6 +7,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="Istarve"
         android:theme="@style/AppTheme" >
+
+       <!-- Login activity -->
         <activity
             android:exported="true"
             android:name=".activities.LoginActivity"
@@ -15,19 +17,27 @@
             android:screenOrientation="portrait">
 
         </activity>
+
+        <!-- Restaurants activity -->
         <activity
             android:exported="true"
             android:name=".activities.RestaurantsActivity"
             android:label="Istarve: Trouve ton restaurant !"
             android:screenOrientation="portrait">
         </activity>
+
+        <!-- Restaurant activity -->
         <activity
             android:exported="true"
             android:name=".activities.RestaurantActivity"
             android:label="Istarve: Trouve ton restaurant !"
             android:screenOrientation="portrait">
         </activity>
+
+        <!-- Googple play service -->
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
+        <!-- Gmap API -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDHrf5A2JdXeT4h-nlCnGfVuotDEUnCFhw"/>
@@ -48,7 +58,7 @@
          Google Maps Android API v2, but are recommended. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <!-- Restaurant photo -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />

@@ -18,6 +18,9 @@ import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.models.Restaurant;
 
+/**
+ * View holding the fragment logic and capturing the user events for the restaurants menu fragment
+ */
 public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = RestaurantsListeFragment.class.getSimpleName();
@@ -33,6 +36,8 @@ public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
         ListView lv=(ListView)RestaurantListeView.findViewById(R.id.listViewRestaurants);
         HashMap<String, String> map;
         new HashMap<String, String>();
+
+        //Formating list
         RestaurantsActivity restaurantsActivity=(RestaurantsActivity) getActivity();
         ArrayList<String>tab = new ArrayList<String>();
         for(Restaurant r:restaurantsActivity.getRestaurants()){
@@ -43,6 +48,8 @@ public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
         }
         ArrayAdapter arrayadp =new ArrayAdapter(restaurantsActivity,  android.R.layout.simple_list_item_1,tab );
         lv.setAdapter(arrayadp);
+
+        //List click listener, start a restaurant activity
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -54,8 +61,6 @@ public class RestaurantsListeFragment extends android.support.v4.app.Fragment {
                 startActivity(intent);
             }
         });
-
-
         return RestaurantListeView;
     }
 

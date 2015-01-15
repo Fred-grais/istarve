@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import fr.utt.if26.istarve.models.Restaurant;
 
+/**
+ *
+ */
 public class DerniersRestaurantsBDD {
 
    private static final int VERSION_BDD = 3;
@@ -31,32 +34,33 @@ public class DerniersRestaurantsBDD {
     private MaBaseSQLite maBaseSQLite;
 
         public DerniersRestaurantsBDD(Context context){
-            //On créer la BDD et sa table
+            //Create the database
             maBaseSQLite = new MaBaseSQLite(context, NOM_BDD, null, VERSION_BDD);
 
         }
 
+        public SQLiteDatabase getBDD(){
+        return bdd;
+        }
+
         public void open(){
-            //on ouvre la BDD en écriture
+            //open a writable database
             bdd = maBaseSQLite.getWritableDatabase();
         }
 
         public void close(){
-            //on ferme l'accès à la BDD
+            //close the database access
             bdd.close();
         }
 
-        public SQLiteDatabase getBDD(){
-            return bdd;
-        }
-
+        //Insert a restaurant object into the database
         public long insertRestaurant(Restaurant restaurant){
+            //the maximum number of rows is 5
             if(!ExistRestaurant(restaurant.getmId())) {
                     if(nbRow()>=5){
                     deleteFirstRow();
                 }
-                Log.v("tt", "tt");
-
+                //Create the values
                 ContentValues values = new ContentValues();
                 values.put(COL_mId, restaurant.getmId());
                 values.put(COL_mlat, restaurant.getmLat());
@@ -67,82 +71,91 @@ public class DerniersRestaurantsBDD {
                 values.put(COL_mUrl, restaurant.getmUrl());
                 values.put(COL_mTypeId, restaurant.getmTypeId());
                 values.put(COL_mRatingsAverage, restaurant.getmRatingsAverage());
-                //on insère l'objet dans la BDD via le ContentValues
+                //insert the ContentValues into the table
                 return bdd.insert(TABLE_DERNIERS_RESTAURANTS, null, values);
             }
             else return 0;
         }
-         public int removeRestaurantWithID(int id){
-            //Suppression d'un restaurant de la BDD grâce à l'ID
-            return bdd.delete(TABLE_DERNIERS_RESTAURANTS, COL_mId + " = " +id, null);
-        }
 
-        public Restaurant getRestaurantWithId(int id){
-            //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
-            Cursor c = bdd.query(TABLE_DERNIERS_RESTAURANTS, null,  COL_mId + "=" + id, null, null, null, null);
-            return cursorToRestaurant(c);
-        }
-
-    public void deleteFirstRow()
-    {
-        Cursor cursor = bdd.query(TABLE_DERNIERS_RESTAURANTS, null, null, null, null, null, null);
-        if(cursor.moveToFirst()) {
-            String rowId = cursor.getString(cursor.getColumnIndex(COL_mId));
-
-            bdd.delete(TABLE_DERNIERS_RESTAURANTS, COL_mId + "=?",  new String[]{rowId});
-        }
-    }
-
-    public ArrayList<Restaurant> getAllRestaurants() {
-        Cursor c = bdd.query(TABLE_DERNIERS_RESTAURANTS, null, null, null, null,null, null);
-        return cursorToRestaurants(c);
-    }
-
-    public boolean ExistRestaurant(int id){
+        //Search with the id, if the restaurant is in the table
+        public boolean ExistRestaurant(int id){
         //Récupère dans un Cursor les valeur correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
         Cursor c = bdd.query(TABLE_DERNIERS_RESTAURANTS, null,  COL_mId + "=" + id, null, null, null, null);
         if(c.getCount()==0)
             return false;
         else
             return true;
-    }
+        }
 
-    public int nbRow() {
+        //remove a restaurant with his id number
+         public int removeRestaurantWithID(int id){
+            //Suppression d'un restaurant de la BDD grâce à l'ID
+            return bdd.delete(TABLE_DERNIERS_RESTAURANTS, COL_mId + " = " +id, null);
+        }
+
+        //get a restaurant with his id number
+        public Restaurant getRestaurantWithId(int id){
+            Cursor c = bdd.query(TABLE_DERNIERS_RESTAURANTS, null,  COL_mId + "=" + id, null, null, null, null);
+            return cursorToRestaurant(c);
+        }
+
+        //delete the first row of the table
+        public void deleteFirstRow()
+        {
+            Cursor cursor = bdd.query(TABLE_DERNIERS_RESTAURANTS, null, null, null, null, null, null);
+            if(cursor.moveToFirst()) {
+                //get the restaurant id
+                String rowId = cursor.getString(cursor.getColumnIndex(COL_mId));
+                //delete the restaurant at row 1
+                bdd.delete(TABLE_DERNIERS_RESTAURANTS, COL_mId + "=?",  new String[]{rowId});
+            }
+        }
+
+        //return all restaurants objects from the database
+         public ArrayList<Restaurant> getAllRestaurants() {
+        Cursor c = bdd.query(TABLE_DERNIERS_RESTAURANTS, null, null, null, null,null, null);
+        return cursorToRestaurants(c);
+        }
+
+
+        //Return the number of restaurants
+        public int nbRow() {
         Cursor c = bdd.query(TABLE_DERNIERS_RESTAURANTS, null, null, null, null,null, null);
         return c.getCount();
-    }
+        }
 
 
 
-        //Cette méthode permet de convertir un cursor en un livre
+        //Convert the cursor to a restaurant object
         private Restaurant cursorToRestaurant(Cursor c){
-            //si aucun élément n'a été retourné dans la requête, on renvoie null
+            //if not restaurant found, return null
             if (c.getCount() == 0)
                 return null;
-
-            //Sinon on se place sur le premier élément
             c.moveToFirst();
-            //On créé un restaurant
+            //Create the restaurant object
             Restaurant restaurant = new Restaurant(c.getInt(0), c.getFloat(1), c.getFloat(2), c.getString(3), c.getString(4), c.getString(5),c.getString(6), c.getInt(7), c.getInt(8));
-            //On ferme le cursor
             c.close();
 
-            //On retourne le restaurant
+            //return the restaurant
             return restaurant;
         }
 
+    //Convert the cursor to a list of restaurant object
     private ArrayList<Restaurant> cursorToRestaurants(Cursor c) {
-// Si la requête ne renvoie pas de résultat
+        //if not restaurant found an empty list
         if (c.getCount() == 0)
             return new ArrayList<Restaurant>(0);
+
         ArrayList<Restaurant> retRestaurants = new ArrayList<Restaurant>(c.getCount());
         c.moveToFirst();
         do {
+            //Create the restaurant object and add to the list
             Restaurant restaurant = new Restaurant(c.getInt(0), c.getFloat(1), c.getFloat(2), c.getString(3), c.getString(4), c.getString(5),c.getString(6), c.getInt(7), c.getInt(8));
             retRestaurants.add(restaurant);
         } while (c.moveToNext());
-// Ferme le curseur pour libérer les ressources
         c.close();
+
+        //return the list of restaurant object
         return retRestaurants;
     }
 

@@ -22,6 +22,9 @@ import fr.utt.if26.istarve.activities.RestaurantActivity;
 import fr.utt.if26.istarve.activities.RestaurantsActivity;
 import fr.utt.if26.istarve.models.Restaurant;
 
+/**
+ * View holding the fragment logic and capturing the user events for the restaurants map fragment
+ */
 public class RestaurantsCarteFragment extends android.support.v4.app.Fragment implements GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = RestaurantsCarteFragment.class.getSimpleName();
@@ -38,10 +41,12 @@ public class RestaurantsCarteFragment extends android.support.v4.app.Fragment im
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View RestaurantCarteView = inflater.inflate(R.layout.fragment_restaurants_carte, null);
+
+       // /getMapFragment
         map = (SupportMapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
 
-        map.getMap().setOnMarkerClickListener((GoogleMap.OnMarkerClickListener) this);
+        //Create a marker for each restaurant
         RestaurantsActivity restaurantsActivity=(RestaurantsActivity) getActivity();
         for(Restaurant r: restaurantsActivity.getRestaurants()){
             Marker m= map.getMap().addMarker(new MarkerOptions()
@@ -49,14 +54,22 @@ public class RestaurantsCarteFragment extends android.support.v4.app.Fragment im
                     .title(r.getmName()+" - "+ Float.toString(r.getDistance())+" Kms"));
             hashMapMarker.put(m,r);
         }
+
+        //Set marker click listener
+        map.getMap().setOnMarkerClickListener((GoogleMap.OnMarkerClickListener) this);
+
+        //enable user location to the map
         map.getMap().setMyLocationEnabled(true);
         Location location = map.getMap().getMyLocation();
         if(location!=null) {
             map.getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
         }
+
         return RestaurantCarteView;
     }
 
+    //Called when the user click on a marker
+    //Start a restaurant activity
     @Override
     public boolean onMarkerClick(Marker marker) {
         // TODO Auto-generated method stub
@@ -72,11 +85,8 @@ public class RestaurantsCarteFragment extends android.support.v4.app.Fragment im
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.v(TAG, "HEreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-
         if (map != null)
             getFragmentManager().beginTransaction().remove(map).commit();
     }
-
 
 }
